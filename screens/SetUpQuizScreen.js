@@ -7,7 +7,7 @@ const SetUpQuizScreen = ({ navigation }) => {
     const [category, setCategory] = useState('');
     const [difficulty, setDifficulty] = useState('');
 
-    const categories = ["01", "02", "03"];
+    const categories = ["General Knowledge", "Entertainment: Books", "Entertainment: Films"];
     const difficulties = ["Easy", "Medium", "Hard"];
 
     const handleStartQuiz = () => {
