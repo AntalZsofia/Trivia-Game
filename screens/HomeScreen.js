@@ -1,9 +1,9 @@
 // screens/HomeScreen.js
 
 import React from 'react';
-import { View, Text, StyleSheet,  Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function HomeScreen() {
+export default function HomeScreen( {navigation}) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Trivia Game</Text>
@@ -11,9 +11,9 @@ export default function HomeScreen() {
         <Text style={styles.buttonText}>Sign In</Text> 
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => console.log("Log in pressed")}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SetUpQuiz')}>
         <Text style={styles.buttonText}>Log In</Text> 
-        </TouchableOpacity>
+      </TouchableOpacity>
     </View>
   );
 }
