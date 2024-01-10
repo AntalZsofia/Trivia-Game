@@ -14,8 +14,15 @@ const SetUpQuizScreen = ({ navigation }) => {
         // Logic to start the quiz
     };
 
-    const handleRandomPlay = () => {
-        // Logic to cancel the quiz setup
+    const handleRandomPlay = async () => {
+        try{
+            const response = await fetch('http://localhost:3000/surprise');
+            const data = await response.json();
+            console.log(data);
+        }
+        catch(err){
+            console.error('Error:', err);
+        }
 
     };
 
