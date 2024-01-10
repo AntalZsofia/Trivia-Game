@@ -3,7 +3,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+
 export default function HomeScreen( {navigation}) {
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Trivia Game</Text>
@@ -41,5 +43,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 20,
+    
   }
 });
