@@ -46,7 +46,8 @@ const QuizScreen = ({ route }) => {
         <View style={styles.container}>
             <View style={styles.quizContainer}>
                 <View style={styles.quizcategoryContainer}>
-                    <Text style={styles.title}>Quiz: {questions[currentQuestionIndex].category} - {questions[currentQuestionIndex].difficulty}</Text>
+                    <Text style={styles.title}>Quiz in: </Text>
+                    <Text style={styles.categoryAndDiff}>{questions[currentQuestionIndex].category} - {questions[currentQuestionIndex].difficulty}</Text>
                 </View>
 
                 <View style={styles.questionContainer}>
@@ -82,6 +83,8 @@ const styles = StyleSheet.create({
     },
     quizcategoryContainer: {
         alignItems: 'center',
+        alignContent: 'center',
+        alignSelf: 'center',
         justifyContent: 'center',
         paddingTop: 20,
         paddingBottom: 20,
@@ -93,6 +96,7 @@ const styles = StyleSheet.create({
         marginBottom: 80,
         width: '85%',
         justifyContent: 'center',
+        textAlign: 'center',
         alignItems: 'center',
         alignSelf: 'center',
         alignContent: 'center',
@@ -101,6 +105,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         alignSelf: 'center',
+    },
+    categoryAndDiff: {
+        fontSize: 18,
+        alignSelf: 'center',
+        alignContent: 'center',
+        justifyContent: 'center',
+        
     },
     question: {
         fontSize: 24,
