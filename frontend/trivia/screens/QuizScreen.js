@@ -10,11 +10,13 @@ const QuizScreen = ({ route }) => {
 
 
     useEffect(() => {
-        const allAnswers = [
-            questions[currentQuestionIndex].correct_answer,
-            ...questions[currentQuestionIndex].incorrect_answers
-        ];
-        setAnswers(shuffleArray(allAnswers));
+        if (questions[currentQuestionIndex]) {
+            const allAnswers = [
+                questions[currentQuestionIndex].correct_answer,
+                ...questions[currentQuestionIndex].incorrect_answers
+            ];
+            setAnswers(shuffleArray(allAnswers));
+        }
     }, [currentQuestionIndex]);
 
     const handleNextQuestion = () => {
@@ -31,22 +33,26 @@ const QuizScreen = ({ route }) => {
     }
 
     return (
-<View style={styles.container}>
-        <View style={styles.quizContainer}>
-            <Text style={styles.title}>Quiz</Text>
-            <View style={styles.questionContainer}>
-                <Text style={styles.question}>{he.decode(questions[currentQuestionIndex].question)}</Text>
-            </View>
-            {answers.map((answer, index) => (
-                <View key={index} style={styles.answersContainer}>
-                    <Text style={styles.answers}>{he.decode(answer)}</Text>
+        <View style={styles.container}>
+            <View style={styles.quizContainer}>
+                <Text style={styles.title}>Quiz</Text>
+                <View style={styles.questionContainer}>
+                    {questions[currentQuestionIndex] && (
+                        <Text style={styles.question}>
+                            {he.decode(questions[currentQuestionIndex].question)}
+                        </Text>
+                    )}
                 </View>
-            ))}
-        </View>
+                {answers.map((answer, index) => (
+                    <View key={index} style={styles.answersContainer}>
+                        <Text style={styles.answers}>{he.decode(answer)}</Text>
+                    </View>
+                ))}
+            </View>
             <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion}>
                 <Text style={styles.nextButtonText}>Next</Text>
             </TouchableOpacity>
-</View>
+        </View>
     );
 }
 
@@ -58,7 +64,7 @@ const styles = StyleSheet.create({
     quizContainer: {
         flex: 1,
         alignItems: 'center',
-        
+
     },
     questionContainer: {
         backgroundColor: '#fff',
@@ -89,6 +95,8 @@ const styles = StyleSheet.create({
     answers: {
         fontSize: 16,
         marginBottom: 20,
+        alignSelf: 'center',
+        justifyContent: 'center',
     },
     nextButton: {
         backgroundColor: '#09BC8A',
