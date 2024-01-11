@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 
 app.get('/surprise', async (req, res) => {
     try {
-        const response = await fetch('https://opentdb.com/api.php?amount=10&type=multiple');
+        const response = await fetch('https://opentdb.com/api.php?amount=1&type=multiple');
         const data = await response.json();
         res.json(data);
     } catch (err) {
