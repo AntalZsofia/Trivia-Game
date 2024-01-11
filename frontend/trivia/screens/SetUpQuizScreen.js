@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
+import categories from '../data/categories';
 
 const SetUpQuizScreen = ({ navigation }) => {
     const [category, setCategory] = useState('');
     const [difficulty, setDifficulty] = useState('');
 
-    const categories = ["General Knowledge", "Entertainment: Books", "Entertainment: Films"];
-    const difficulties = ["Easy", "Medium", "Hard"];
-
-    const handleStartQuiz = () => {
-        // Logic to start the quiz
+    const difficulties = ["easy", "medium", "hard"];
+    
+    const handleStartQuiz = async () => {
+        try{
+            const categoryId = categories[category];
+            const amount = 10;
+            
+            const response = await fetch(`http://localhost:3000/quiz?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple`)
+            const data = await response.json();
+            console.log(data);
+            navigation.navigate('QuizScreen', { questions: data.results });
+        }catch(err){
+            console.error('Error:', err);
+        }   
     };
 
     const handleRandomPlay = async () => {
@@ -36,8 +46,8 @@ const SetUpQuizScreen = ({ navigation }) => {
             style={styles.picker}
             selectedValue={category} 
             onValueChange={setCategory}>
-                {categories.map((category, index) => (
-                    <Picker.Item key={index} label={category} value={category} />
+                {Object.keys(categories).map((categoryName, index) => (
+                    <Picker.Item key={index} label={categoryName} value={categoryName} />
                 ))}
             </Picker>           
              <Text style={styles.label}>Difficulty:</Text>
