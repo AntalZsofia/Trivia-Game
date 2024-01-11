@@ -7,14 +7,15 @@ import categories from '../data/categories';
 const SetUpQuizScreen = ({ navigation }) => {
     const [category, setCategory] = useState('');
     const [difficulty, setDifficulty] = useState('');
+    const [amount, setAmount] = useState(1);
 
     const difficulties = ["easy", "medium", "hard"];
+    const amounts = Array.from({length: 50}, (_, i) => i + 1);
     
     const handleStartQuiz = async () => {
         try{
             const categoryId = categories[category];
-            const amount = 10;
-            
+
             const response = await fetch(`http://localhost:3000/quiz?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple`)
             const data = await response.json();
             console.log(data);
@@ -59,6 +60,15 @@ const SetUpQuizScreen = ({ navigation }) => {
                     <Picker.Item key={index} label={difficulty} value={difficulty} />
                 ))} 
                 </Picker>
+                <Text style={styles.label}>Amount:</Text>
+            <Picker
+            style={styles.picker}
+            selectedValue={amount}
+            onValueChange={setAmount}>
+                {amounts.map((amount, index) => (
+                    <Picker.Item key={index} label={amount.toString()} value={amount} />
+                ))} 
+            </Picker>
             <TouchableOpacity style={styles.startButton} onPress={handleStartQuiz}>
                 <Text style={styles.startButtonText}>Start Quiz</Text>
             </TouchableOpacity>
