@@ -40,7 +40,7 @@ export default function App() {
               case 'Home':
                 icon = <Image source={Home} style={{ width: 20, height: 20 }} />;
                 break;
-              case 'SetUpQuiz':
+              case 'Quiz':
                 icon = <Image source={Play} style={{ width: 20, height: 20 }} />;
                 break;
               case 'Friends':
@@ -66,7 +66,7 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Friends" component={FriendsScreen} />
-        <Tab.Screen name="SetUpQuiz" component={SetUpQuizStack} />
+        <Tab.Screen name="Quiz" component={SetUpQuizStack} />
         <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
         <Tab.Screen name="Ranking" component={RankingScreen} />
       </Tab.Navigator>
