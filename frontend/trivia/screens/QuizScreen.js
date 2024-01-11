@@ -7,6 +7,7 @@ const QuizScreen = ({ route }) => {
     const { questions } = route.params;
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
 
 
     useEffect(() => {
@@ -31,11 +32,23 @@ const QuizScreen = ({ route }) => {
         }
         return array;
     }
+    const handleAnswer = (answer) => {
+        setSelectedAnswer(answer);
+        if (questions[currentQuestionIndex].correct_answer === answer) {
+            console.log('Correct Answer');
+        } else {
+            console.log('Wrong Answer');
+        }
+
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.quizContainer}>
-                <Text style={styles.title}>Quiz</Text>
+                <View style={styles.quizcategoryContainer}>
+                    <Text style={styles.title}>Quiz: {questions[currentQuestionIndex].category} - {questions[currentQuestionIndex].difficulty}</Text>
+                </View>
+
                 <View style={styles.questionContainer}>
                     {questions[currentQuestionIndex] && (
                         <Text style={styles.question}>
@@ -43,10 +56,12 @@ const QuizScreen = ({ route }) => {
                         </Text>
                     )}
                 </View>
+
                 {answers.map((answer, index) => (
-                    <View key={index} style={styles.answersContainer}>
+                    <TouchableOpacity key={index}
+                        style={selectedAnswer === answer ? styles.selectedAnswerContainer : styles.answersContainer}>
                         <Text style={styles.answers}>{he.decode(answer)}</Text>
-                    </View>
+                    </TouchableOpacity>
                 ))}
             </View>
             <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion}>
@@ -59,42 +74,57 @@ const QuizScreen = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#46A0F0'
+        backgroundColor: '#46A0F0',
     },
     quizContainer: {
         flex: 1,
+        width: '100%',
+    },
+    quizcategoryContainer: {
         alignItems: 'center',
-
+        justifyContent: 'center',
+        paddingTop: 20,
+        paddingBottom: 20,
     },
     questionContainer: {
         backgroundColor: '#fff',
         padding: 20,
         borderRadius: 8,
         marginBottom: 80,
-        width: '90%',
+        width: '85%',
         justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        alignContent: 'center',
     },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
+        alignSelf: 'center',
     },
     question: {
-        fontSize: 20,
+        fontSize: 24,
         marginBottom: 20,
         alignSelf: 'center',
         fontStyle: 'bold'
     },
     answersContainer: {
         backgroundColor: '#fff',
-        padding: 5,
+        padding: 10,
         borderRadius: 8,
         marginBottom: 20,
-        width: '90%',
+        width: '70%',
+        alignItems: 'center',
+        alignContent: 'center',
+        alignSelf: 'center',
         justifyContent: 'center',
+        minHeight: 50,
+    },
+    selectedAnswerContainer: {
+        backgroundColor: '#ddd'
     },
     answers: {
-        fontSize: 16,
-        marginBottom: 20,
+        fontSize: 20,
         alignSelf: 'center',
         justifyContent: 'center',
     },
