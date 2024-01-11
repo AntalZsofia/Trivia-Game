@@ -19,6 +19,7 @@ const SetUpQuizScreen = ({ navigation }) => {
             const response = await fetch('http://localhost:3000/surprise');
             const data = await response.json();
             console.log(data);
+            navigation.navigate('QuizScreen', { questions: data.results });
         }
         catch(err){
             console.error('Error:', err);
