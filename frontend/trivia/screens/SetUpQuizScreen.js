@@ -84,7 +84,7 @@ const SetUpQuizScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.randomPlayButton} onPress={handleRandomPlay}>
                 <Text style={styles.randomPlayButtonText}>Surprise Me!</Text>
             </TouchableOpacity>
-            <Text style={styles.additionalInfo}>Quiz stars with a random category and difficulty</Text>
+            <Text style={styles.additionalInfo}>Quiz stars with a random category, difficulty and 10 questions</Text>
 
         </View>
     );
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     randomPlayButton: {
         backgroundColor: '#09BC8A',
-        marginTop: 50,
+        marginTop: 80,
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: 30,
@@ -142,8 +142,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     additionalInfo: {
-        fontSize: 12,
+        fontSize: 14,
         alignSelf: 'center',
+        alignContent: 'center',
+        textAlign: 'center',
         marginTop: 10,
         color: '#777575',
     }
