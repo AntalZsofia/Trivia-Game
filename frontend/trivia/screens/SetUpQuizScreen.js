@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
@@ -7,32 +7,40 @@ import categories from '../data/categories';
 const SetUpQuizScreen = ({ navigation }) => {
     const [category, setCategory] = useState('');
     const [difficulty, setDifficulty] = useState('');
-    const [amount, setAmount] = useState(1);
+    const [amount, setAmount] = useState(0);
 
     const difficulties = ["Choose a difficulty", "easy", "medium", "hard"];
-    const amounts = Array.from({length: 51}, (_, i) => i);
-    
+    const amounts = Array.from({ length: 51 }, (_, i) => i);
+
+    useEffect(() => {
+        return () => {
+            setCategory('');
+            setDifficulty('');
+            setAmount(0);
+        };
+    }, []);
+
     const handleStartQuiz = async () => {
-        try{
+        try {
             const categoryId = categories[category];
 
             const response = await fetch(`http://localhost:3000/quiz?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple`)
             const data = await response.json();
             console.log(data);
             navigation.navigate('QuizScreen', { questions: data.results });
-        }catch(err){
+        } catch (err) {
             console.error('Error:', err);
-        }   
+        }
     };
 
     const handleRandomPlay = async () => {
-        try{
+        try {
             const response = await fetch('http://localhost:3000/surprise');
             const data = await response.json();
             console.log(data);
             navigation.navigate('QuizScreen', { questions: data.results });
         }
-        catch(err){
+        catch (err) {
             console.error('Error:', err);
         }
 
@@ -43,31 +51,31 @@ const SetUpQuizScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.title}>New Game</Text>
             <Text style={styles.label}>Category:</Text>
-            <Picker 
-            style={styles.picker}
-            selectedValue={category} 
-            onValueChange={setCategory}>
+            <Picker
+                style={styles.picker}
+                selectedValue={category}
+                onValueChange={setCategory}>
                 {Object.keys(categories).map((categoryName, index) => (
                     <Picker.Item key={index} label={categoryName} value={categoryName} />
                 ))}
-            </Picker>           
-             <Text style={styles.label}>Difficulty:</Text>
+            </Picker>
+            <Text style={styles.label}>Difficulty:</Text>
             <Picker
-            style={styles.picker}
-            selectedValue={difficulty}
-            onValueChange={setDifficulty}>
+                style={styles.picker}
+                selectedValue={difficulty}
+                onValueChange={setDifficulty}>
                 {difficulties.map((difficulty, index) => (
                     <Picker.Item key={index} label={difficulty} value={difficulty} />
-                ))} 
-                </Picker>
-                <Text style={styles.label}>Amount:</Text>
+                ))}
+            </Picker>
+            <Text style={styles.label}>Amount:</Text>
             <Picker
-            style={styles.picker}
-            selectedValue={amount}
-            onValueChange={setAmount}>
+                style={styles.picker}
+                selectedValue={amount}
+                onValueChange={setAmount}>
                 {amounts.map((amount, index) => (
                     <Picker.Item key={index} label={amount.toString()} value={amount} />
-                ))} 
+                ))}
             </Picker>
             <TouchableOpacity style={styles.startButton} onPress={handleStartQuiz}>
                 <Text style={styles.startButtonText}>Start Quiz</Text>
@@ -103,6 +111,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 20,
         paddingLeft: 10,
+        fontSize: 18,
     },
     startButton: {
         backgroundColor: '#09BC8A',
