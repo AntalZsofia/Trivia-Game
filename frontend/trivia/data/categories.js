@@ -1,4 +1,5 @@
 export default {
+    "Choose a category": "0",
     "General Knowledge": "9",
     "Entertainment: Books": "10",
     "Entertainment: Film": "11",

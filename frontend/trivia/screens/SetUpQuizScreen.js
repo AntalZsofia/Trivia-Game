@@ -9,8 +9,8 @@ const SetUpQuizScreen = ({ navigation }) => {
     const [difficulty, setDifficulty] = useState('');
     const [amount, setAmount] = useState(1);
 
-    const difficulties = ["easy", "medium", "hard"];
-    const amounts = Array.from({length: 50}, (_, i) => i + 1);
+    const difficulties = ["Choose a difficulty", "easy", "medium", "hard"];
+    const amounts = Array.from({length: 51}, (_, i) => i);
     
     const handleStartQuiz = async () => {
         try{
