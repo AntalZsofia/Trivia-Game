@@ -38,22 +38,22 @@ export default function App() {
 
             switch (route.name) {
               case 'Home':
-                icon = <Image source={Home} style={{ width: 20, height: 20 }} />;
+                icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
                 break;
               case 'Quiz':
-                icon = <Image source={Play} style={{ width: 20, height: 20 }} />;
+                icon = <Image source={Play} style={{ width: 30, height: 30 }} />;
                 break;
               case 'Friends':
-                icon = <Image source={Friends} style={{ width: 20, height: 20 }} />;
+                icon = <Image source={Friends} style={{ width: 30, height: 30 }} />;
                 break;
               case 'Leaderboard':
-                icon = <Image source={Leaderboard} style={{ width: 20, height: 20 }} />;
+                icon = <Image source={Leaderboard} style={{ width: 30, height: 30 }} />;
                 break;
               case 'Ranking':
-                icon = <Image source={Ranking} style={{ width: 20, height: 20 }} />;
+                icon = <Image source={Ranking} style={{ width: 30, height: 30}} />;
                 break;
               default:
-                icon = <Image source={Home} style={{ width: 20, height: 20 }} />;
+                icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
                 break;
             }
             return icon;
