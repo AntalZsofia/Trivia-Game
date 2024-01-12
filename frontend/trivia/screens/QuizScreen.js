@@ -10,6 +10,7 @@ const QuizScreen = ({ route }) => {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isAnswered, setIsAnswered] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
+    const [showAnswerResult, setShowAnswerResult] = useState(false);
 
 
 
@@ -24,8 +25,15 @@ const QuizScreen = ({ route }) => {
     }, [currentQuestionIndex]);
 
     const handleNextQuestion = () => {
+        console.log('click');
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
+            setSelectedAnswer(null);
+            setIsAnswered(false);
+            setShowAnswerResult(false);
+        } else {
+            console.log('End of Quiz');
+            navigator.navigate('Results');
         }
     };
     function shuffleArray(array) {
@@ -37,6 +45,8 @@ const QuizScreen = ({ route }) => {
     }
     const handleAnswer = (answer) => {
         setSelectedAnswer(answer);
+        setIsAnswered(true);
+
         if (questions[currentQuestionIndex].correct_answer === answer) {
             console.log('Correct Answer');
             setIsCorrect(true);
@@ -45,6 +55,7 @@ const QuizScreen = ({ route }) => {
             console.log('Wrong Answer');
             setIsCorrect(false);
         }
+        setShowAnswerResult(true);
 
     }
 
@@ -55,7 +66,7 @@ const QuizScreen = ({ route }) => {
                     <Text style={styles.title}>Quiz in: </Text>
                     <Text style={styles.categoryAndDiff}>{questions[currentQuestionIndex].category} - {questions[currentQuestionIndex].difficulty}</Text>
                 </View>
-    
+
                 <View style={styles.questionContainer}>
                     {questions[currentQuestionIndex] && (
                         <Text style={styles.question}>
@@ -63,11 +74,17 @@ const QuizScreen = ({ route }) => {
                         </Text>
                     )}
                 </View>
-    
+
                 {answers.map((answer, index) => (
                     <TouchableOpacity key={index}
-                        style={selectedAnswer === answer ? styles.selectedAnswerContainer : styles.answersContainer}
+                        style={[
+                            styles.answersContainer,
+                            selectedAnswer === answer && showAnswerResult ? (isCorrect ? styles.correctAnswerContainer : styles.wrongAnswerContainer) : null,
+                        showAnswerResult && answer === questions[currentQuestionIndex].correct_answer ? styles.correctAnswerContainer : null,
+                        ]}
                         onPress={() => handleAnswer(answer)}
+                        disabled={showAnswerResult}
+
                     >
                         <Text style={styles.answers}>{he.decode(answer)}</Text>
                     </TouchableOpacity>
@@ -119,7 +136,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignContent: 'center',
         justifyContent: 'center',
-        
+
     },
     question: {
         fontSize: 24,
@@ -154,10 +171,10 @@ const styles = StyleSheet.create({
         borderColor: 'green',
     },
     correctAnswerContainer: {
-        backgroundColor: 'green',
+        backgroundColor: '#69F03C',
     },
     wrongAnswerContainer: {
-        backgroundColor: 'red',
+        backgroundColor: '#FF3333',
     },
     answers: {
         fontSize: 20,
