@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import he from 'he';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const QuizScreen = ({ route }) => {
@@ -33,7 +33,7 @@ const QuizScreen = ({ route }) => {
             setShowAnswerResult(false);
         } else {
             console.log('End of Quiz');
-            navigator.navigate('Results');
+            // navigator.navigate('Results');
         }
     };
     function shuffleArray(array) {
@@ -80,7 +80,7 @@ const QuizScreen = ({ route }) => {
                         style={[
                             styles.answersContainer,
                             selectedAnswer === answer && showAnswerResult ? (isCorrect ? styles.correctAnswerContainer : styles.wrongAnswerContainer) : null,
-                        showAnswerResult && answer === questions[currentQuestionIndex].correct_answer ? styles.correctAnswerContainer : null,
+                            showAnswerResult && answer === questions[currentQuestionIndex].correct_answer ? styles.correctAnswerContainer : null,
                         ]}
                         onPress={() => handleAnswer(answer)}
                         disabled={showAnswerResult}
@@ -90,9 +90,15 @@ const QuizScreen = ({ route }) => {
                     </TouchableOpacity>
                 ))}
             </View>
-            <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion}>
+            <Pressable
+                style={styles.nextButton}
+                onPress={handleNextQuestion}
+                disabled={!isAnswered}
+            >
                 <Text style={styles.nextButtonText}>Next</Text>
-            </TouchableOpacity>
+            </Pressable>
+
+
         </View>
     );
 }
