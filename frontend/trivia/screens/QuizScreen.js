@@ -8,6 +8,9 @@ const QuizScreen = ({ route }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [isAnswered, setIsAnswered] = useState(false);
+    const [isCorrect, setIsCorrect] = useState(false);
+
 
 
     useEffect(() => {
@@ -36,8 +39,11 @@ const QuizScreen = ({ route }) => {
         setSelectedAnswer(answer);
         if (questions[currentQuestionIndex].correct_answer === answer) {
             console.log('Correct Answer');
+            setIsCorrect(true);
+
         } else {
             console.log('Wrong Answer');
+            setIsCorrect(false);
         }
 
     }
@@ -49,7 +55,7 @@ const QuizScreen = ({ route }) => {
                     <Text style={styles.title}>Quiz in: </Text>
                     <Text style={styles.categoryAndDiff}>{questions[currentQuestionIndex].category} - {questions[currentQuestionIndex].difficulty}</Text>
                 </View>
-
+    
                 <View style={styles.questionContainer}>
                     {questions[currentQuestionIndex] && (
                         <Text style={styles.question}>
@@ -57,10 +63,12 @@ const QuizScreen = ({ route }) => {
                         </Text>
                     )}
                 </View>
-
+    
                 {answers.map((answer, index) => (
                     <TouchableOpacity key={index}
-                        style={selectedAnswer === answer ? styles.selectedAnswerContainer : styles.answersContainer}>
+                        style={selectedAnswer === answer ? styles.selectedAnswerContainer : styles.answersContainer}
+                        onPress={() => handleAnswer(answer)}
+                    >
                         <Text style={styles.answers}>{he.decode(answer)}</Text>
                     </TouchableOpacity>
                 ))}
@@ -132,7 +140,24 @@ const styles = StyleSheet.create({
         minHeight: 50,
     },
     selectedAnswerContainer: {
-        backgroundColor: '#ddd'
+        backgroundColor: '#fff',
+        padding: 10,
+        borderRadius: 8,
+        marginBottom: 20,
+        width: '70%',
+        alignItems: 'center',
+        alignContent: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        minHeight: 50,
+        borderWidth: 4,
+        borderColor: 'green',
+    },
+    correctAnswerContainer: {
+        backgroundColor: 'green',
+    },
+    wrongAnswerContainer: {
+        backgroundColor: 'red',
     },
     answers: {
         fontSize: 20,
