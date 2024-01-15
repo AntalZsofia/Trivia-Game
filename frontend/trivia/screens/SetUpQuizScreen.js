@@ -49,7 +49,7 @@ const SetUpQuizScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>New Game</Text>
+
             <Text style={styles.label}>Category:</Text>
             <Picker
                 style={styles.picker}
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        marginTop: 40,
     },
     title: {
         fontSize: 24,
