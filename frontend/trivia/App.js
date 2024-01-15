@@ -8,6 +8,7 @@ import FriendsScreen from './screens/FriendsScreen';
 import LeaderboardScreen from './screens/LeaderboardScreen';
 import RankingScreen from './screens/RankingScreen';
 import QuizScreen from './screens/QuizScreen';
+import ResultScreen from './screens/ResultScreen';
 import Home from './assets/icons/star.png';
 import Play from './assets/icons/play.png'
 import Friends from './assets/icons/friends.png'
@@ -24,6 +25,7 @@ function SetUpQuizStack(){
     <Stack.Navigator>
       <Stack.Screen name="SetUpQuiz" component={SetUpQuizScreen} options={{ headerShown: false }}/>
       <Stack.Screen name="QuizScreen" component={QuizScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ResultScreen" component={ResultScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
