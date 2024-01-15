@@ -6,14 +6,14 @@ import HomeScreen from './screens/HomeScreen';
 import SetUpQuizScreen from './screens/SetUpQuizScreen';
 import FriendsScreen from './screens/FriendsScreen';
 import LeaderboardScreen from './screens/LeaderboardScreen';
-import RankingScreen from './screens/RankingScreen';
+import TournamentsScreen from './screens/TournamentsScreen';
 import QuizScreen from './screens/QuizScreen';
 import ResultScreen from './screens/ResultScreen';
-import Home from './assets/icons/star.png';
+import Home from './assets/icons/account.png';
 import Play from './assets/icons/play.png'
 import Friends from './assets/icons/friends.png'
 import Leaderboard from './assets/icons/trophyicon.png'
-import Ranking from './assets/icons/ranking.png'
+import Tournament from './assets/icons/ranking.png'
 
 import { Image } from 'react-native';
 
@@ -51,8 +51,8 @@ export default function App() {
               case 'Leaderboard':
                 icon = <Image source={Leaderboard} style={{ width: 30, height: 30 }} />;
                 break;
-              case 'Ranking':
-                icon = <Image source={Ranking} style={{ width: 30, height: 30}} />;
+              case 'Tournament':
+                icon = <Image source={Tournament} style={{ width: 30, height: 30}} />;
                 break;
               default:
                 icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
@@ -70,7 +70,7 @@ export default function App() {
         <Tab.Screen name="Friends" component={FriendsScreen} />
         <Tab.Screen name="Quiz" component={SetUpQuizStack} />
         <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-        <Tab.Screen name="Ranking" component={RankingScreen} />
+        <Tab.Screen name="Tournament" component={TournamentsScreen} />
       </Tab.Navigator>
 </NavigationContainer>
   );
