@@ -12,6 +12,7 @@ const QuizScreen = ({ navigation, route }) => {
     const [isCorrect, setIsCorrect] = useState(false);
     const [showAnswerResult, setShowAnswerResult] = useState(false);
     const [correctAnswers, setCorrectAnswers] = useState(0);
+    const [points, setPoints] = useState(0);
 
 
 
@@ -34,13 +35,13 @@ const QuizScreen = ({ navigation, route }) => {
             setShowAnswerResult(false);
         } else {
             console.log('End of Quiz');
-            console.log('Correct Answers: ' + correctAnswers);
 
             navigation.navigate('ResultScreen', { 
                 totalQuestions: questions.length, 
                 correctAnswers: correctAnswers, 
                 category: questions[currentQuestionIndex].category, 
-                difficulty: questions[currentQuestionIndex].difficulty 
+                difficulty: questions[currentQuestionIndex].difficulty,
+                points: points, 
             });
         }
     };
@@ -60,6 +61,19 @@ const QuizScreen = ({ navigation, route }) => {
             setIsCorrect(true);
             setCorrectAnswers(correctAnswers + 1);
 
+            switch(questions[currentQuestionIndex].difficulty){
+                case 'easy':
+                    setPoints(points + 1);
+                    break;
+                case 'medium':
+                    setPoints(points + 2);
+                    break;
+                case 'hard':
+                    setPoints(points + 3);
+                    break;
+                default:
+                    break;
+            }
 
         } else {
             console.log('Wrong Answer');
