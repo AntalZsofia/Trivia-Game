@@ -62,6 +62,9 @@ const QuizScreen = ({ route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.quizContainer}>
+                <View style={styles.counterContainer}>
+                <Text style={styles.counter}>{currentQuestionIndex + 1} / {questions.length}</Text>
+                </View>
                 <View style={styles.quizcategoryContainer}>
                     <Text style={styles.title}>Quiz in: </Text>
                     <Text style={styles.categoryAndDiff}>{questions[currentQuestionIndex].category} - {questions[currentQuestionIndex].difficulty}</Text>
@@ -120,6 +123,18 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 20,
     },
+    counterContainer: {
+        alignItems: 'flex-start',
+        alignContent: 'flex-start',
+        alignSelf: 'flex-start',
+        justifyContent: 'flex-start',
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: 'black',
+        marginLeft: 20,
+        marginTop: 20,
+        padding: 5,
+        },
     questionContainer: {
         backgroundColor: '#fff',
         padding: 20,
@@ -143,6 +158,12 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
 
+    },
+    counter:{
+        fontSize: 18,
+        alignSelf: 'center',
+        alignContent: 'center',
+        justifyContent: 'center',
     },
     question: {
         fontSize: 24,

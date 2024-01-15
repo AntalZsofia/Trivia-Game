@@ -22,7 +22,7 @@ const Stack = createStackNavigator();
 function SetUpQuizStack(){
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SetUpQuiz" component={SetUpQuizScreen} />
+      <Stack.Screen name="SetUpQuiz" component={SetUpQuizScreen} options={{ headerShown: false }}/>
       <Stack.Screen name="QuizScreen" component={QuizScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
