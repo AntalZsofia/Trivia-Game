@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'react-native';
 import Questions from '../assets/icons/layer.png';
 import CorrectAnswers from '../assets/icons/checked.png';
+import Points from '../assets/icons/star.png';
+import AllPoints from '../assets/icons/five-stars.png';
 
 
 const ResultScreen = ({ route }) => {
@@ -38,8 +40,31 @@ const ResultScreen = ({ route }) => {
                     <Text style={styles.resultLabel}>Correct Answers</Text>
                 </View>
 
+                <View style={styles.resultDetailsContainer}>
+                    <View style={styles.imageAndTextContainer}>
+                    <Image source={Points} style={{ width: 30, height: 30, marginLeft: 10 }} />
+                    <Text style={styles.result}>{questions.points}</Text>
+                    </View>
+                    <Text style={styles.resultLabel}>Points gained</Text>
                 </View>
 
+                <View style={styles.resultDetailsContainer}>
+                    <View style={styles.imageAndTextContainer}>
+                    <Image source={AllPoints} style={{ width: 30, height: 30, marginLeft: 10 }} />
+                    <Text style={styles.result}>{questions.points}</Text>
+                    </View>
+                    <Text style={styles.resultLabel}>Total points</Text>
+                </View>
+
+                </View>
+<View style={styles.buttonsContainer}>
+<Pressable style={styles.buttonTournament} onPress={() => navigation.navigate('TournamentsScreen')}>
+        <Text style={styles.buttonText}>Make this a tournament</Text>
+    </Pressable>
+    <Pressable style={styles.buttonBack} onPress={() => navigation.navigate('QuizScreen')}>
+        <Text style={styles.buttonText}>Back</Text>
+    </Pressable>
+</View>
         </View>
     )
 }
@@ -88,13 +113,15 @@ const styles = StyleSheet.create({
     resultsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        flexWrap: 'wrap',
+        marginTop: 20,
     },
     resultDetailsContainer:{
         backgroundColor: '#fff',
         padding: 20,
         borderRadius: 8,
-        marginTop: 20,
-        marginBottom: 40,
+        marginTop: 10,
+        marginBottom: 20,
         width: '41%',
         alignSelf: 'center',
     },
@@ -109,7 +136,36 @@ const styles = StyleSheet.create({
     },
     resultLabel: {
         fontSize: 18,
-        
+        marginTop: 7,
+    },
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        flexWrap: 'wrap',
+        marginTop: 20,
+    },
+    buttonBack: {
+        backgroundColor: '#09BC8A',
+        marginTop: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 8
+    },
+    buttonTournament: {
+        backgroundColor: '#09BC8A',
+        marginTop: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 8
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 20,
+        alignSelf: 'center'
     }
 
 });
