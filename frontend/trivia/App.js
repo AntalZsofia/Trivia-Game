@@ -16,6 +16,7 @@ import Leaderboard from './assets/icons/trophyicon.png'
 import Tournament from './assets/icons/ranking.png'
 
 import { Image } from 'react-native';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,11 +24,46 @@ const Stack = createStackNavigator();
 function SetUpQuizStack(){
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SetUpQuiz" component={SetUpQuizScreen} options={{ headerShown: false }}/>
+      <Stack.Screen 
+        name="New Game" 
+        component={SetUpQuizScreen} 
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity:0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }}
+      />      
       <Stack.Screen name="QuizScreen" component={QuizScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ResultScreen" component={ResultScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
+}
+function getTabBarVisibility(route) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+
+  switch(routeName) {
+    case 'Home':
+    case 'QuizScreen':
+    case 'ResultScreen':
+      return false;
+    default:
+      return true;
+  }
 }
 
 export default function App() {
@@ -42,7 +78,7 @@ export default function App() {
               case 'Home':
                 icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
                 break;
-              case 'Quiz':
+              case 'New Game':
                 icon = <Image source={Play} style={{ width: 30, height: 30 }} />;
                 break;
               case 'Friends':
@@ -60,15 +96,16 @@ export default function App() {
             }
             return icon;
           },
+          tabBarVisible: getTabBarVisibility(route),
         })}
         tabBarOptions={{
           activeTintColor: 'tomato',
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false}}/>
         <Tab.Screen name="Friends" component={FriendsScreen} />
-        <Tab.Screen name="Quiz" component={SetUpQuizStack} />
+        <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false}} />
         <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
         <Tab.Screen name="Tournament" component={TournamentsScreen} />
       </Tab.Navigator>
