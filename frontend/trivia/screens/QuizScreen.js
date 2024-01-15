@@ -3,7 +3,7 @@ import he from 'he';
 import { View, Text, StyleSheet, Button, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const QuizScreen = ({ route }) => {
+const QuizScreen = ({ navigation, route }) => {
     const { questions } = route.params;
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
@@ -11,6 +11,7 @@ const QuizScreen = ({ route }) => {
     const [isAnswered, setIsAnswered] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
     const [showAnswerResult, setShowAnswerResult] = useState(false);
+    const [correctAnswers, setCorrectAnswers] = useState(0);
 
 
 
@@ -33,7 +34,14 @@ const QuizScreen = ({ route }) => {
             setShowAnswerResult(false);
         } else {
             console.log('End of Quiz');
-            // navigator.navigate('Results');
+            console.log('Correct Answers: ' + correctAnswers);
+
+            navigation.navigate('ResultScreen', { 
+                totalQuestions: questions.length, 
+                correctAnswers: correctAnswers, 
+                category: questions[currentQuestionIndex].category, 
+                difficulty: questions[currentQuestionIndex].difficulty 
+            });
         }
     };
     function shuffleArray(array) {
@@ -50,6 +58,8 @@ const QuizScreen = ({ route }) => {
         if (questions[currentQuestionIndex].correct_answer === answer) {
             console.log('Correct Answer');
             setIsCorrect(true);
+            setCorrectAnswers(correctAnswers + 1);
+
 
         } else {
             console.log('Wrong Answer');
