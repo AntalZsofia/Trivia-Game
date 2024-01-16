@@ -1,13 +1,34 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 const app = express();
 const port = 3000;
 
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => console.log('MongoDB Connected'))
+.catch(err => console.log(err));
+
+//Models
+const User = require('./models/User');
+const Tournament = require('./models/Tournament');
+const Question = require('./models/Question');
+
+
+
+
+// Middleware
 app.use(cors());
 
+
+
+// Routes
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
 //random trivia
 app.get('/surprise', async (req, res) => {
     try {
