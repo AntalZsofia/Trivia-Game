@@ -24,7 +24,7 @@ const SetUpQuizScreen = ({ navigation }) => {
         try {
             const categoryId = categories[category];
 
-            const response = await fetch(`http://localhost:3000/quiz?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple`)
+            const response = await fetch(`http://localhost:3000/trivia/quiz?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple`)
             const data = await response.json();
             console.log(data);
             navigation.navigate('QuizScreen', { questions: data.results });
@@ -35,7 +35,7 @@ const SetUpQuizScreen = ({ navigation }) => {
 
     const handleRandomPlay = async () => {
         try {
-            const response = await fetch('http://localhost:3000/surprise');
+            const response = await fetch('http://localhost:3000/trivia/surprise');
             const data = await response.json();
             console.log(data);
             navigation.navigate('QuizScreen', { questions: data.results });
