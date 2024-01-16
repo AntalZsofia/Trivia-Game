@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
 import SetUpQuizScreen from './screens/SetUpQuizScreen';
 import FriendsScreen from './screens/FriendsScreen';
 import LeaderboardScreen from './screens/LeaderboardScreen';
@@ -20,6 +21,16 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
+function HomeStackScreen(){
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false}}/>
+      <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false}}/>
+    </Stack.Navigator>
+  );
+}
+
 
 function SetUpQuizStack(){
   return (
@@ -103,7 +114,7 @@ export default function App() {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false}}/>
+        <Tab.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false}}/>
         <Tab.Screen name="Friends" component={FriendsScreen} />
         <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false}} />
         <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
