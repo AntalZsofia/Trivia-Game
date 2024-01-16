@@ -50,3 +50,4 @@ package-lock.json
 =======
 .env
 >>>>>>> a5fce4d95af72be84914fbf24395108309be3675
+/backend/.env
