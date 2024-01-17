@@ -11,12 +11,12 @@ export default function HomeScreen( {navigation}) {
   return (
     <View style={styles.container}>
       <Image source={Title} style={{ width: 400, height: 400 }} resizeMode="contain" />
-      <TouchableOpacity style={styles.button} onPress={() => console.log("Sign in pressed")}>
-        <Text style={styles.buttonText}>Sign In</Text> 
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RegisterScreen')}>
+        <Text style={styles.buttonText}>Register</Text> 
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginScreen')}>
-        <Text style={styles.buttonText}>Log In</Text> 
+        <Text style={styles.buttonText}>Login</Text> 
       </TouchableOpacity>
     </View>
   );
