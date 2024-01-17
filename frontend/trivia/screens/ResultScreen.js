@@ -7,7 +7,8 @@ import Points from '../assets/icons/star.png';
 import AllPoints from '../assets/icons/five-stars.png';
 
 
-const ResultScreen = ({ route }) => {
+
+const ResultScreen = ({ route, navigation }) => {
     const questions = route.params;
 
     console.log(questions); 
@@ -61,7 +62,7 @@ const ResultScreen = ({ route }) => {
 <Pressable style={styles.buttonTournament} onPress={() => navigation.navigate('TournamentsScreen')}>
         <Text style={styles.buttonText}>Make this a tournament</Text>
     </Pressable>
-    <Pressable style={styles.buttonBack} onPress={() => navigation.navigate('QuizScreen')}>
+    <Pressable style={styles.buttonBack} onPress={() => navigation.navigate('LeaderboardScreen')}>
         <Text style={styles.buttonText}>Back</Text>
     </Pressable>
 </View>
