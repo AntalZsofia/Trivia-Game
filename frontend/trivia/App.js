@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import LoginScreen from './screens/LoginScreen';
 import SetUpQuizScreen from './screens/SetUpQuizScreen';
 import FriendsScreen from './screens/FriendsScreen';
@@ -26,6 +27,7 @@ function HomeStackScreen(){
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false}}/>
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false}}/>
     </Stack.Navigator>
   );
