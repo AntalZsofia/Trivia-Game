@@ -14,8 +14,12 @@ const register = async (req, res) => {
         res.json({ message: 'User created successfully.' });
     }
     catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Error registering new user.' });
+        if (err.code === 11000) {
+            res.status(400).json({ error: 'Email already in use.' });
+        } else {
+            console.error(err);
+            res.status(500).json({ error: 'Error registering new user.' });
+        }
     
     }
 };
