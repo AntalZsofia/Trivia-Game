@@ -8,6 +8,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
+
     const handleRegister = async () => {
         if (username === '' || password === '' || email === '') {
             alert('Username, password and email fields are required.');
@@ -19,12 +20,12 @@ const RegisterScreen = ({ navigation, dispatch }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ username, email, password}),
             });
             const data = await response.json();
             if (response.ok) {
                 console.log('Register succesful', data.token);
-                navigation.navigate('SetUpQuizScreen');
+                navigation.navigate('New Game', {screen: 'New Game'})
             } else {
                 console.log('Register failed', data.error);
             }
@@ -53,6 +54,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
                     onChangeText={setPassword}
                     value={password}
                     placeholder="Password" />
+
                 <TouchableOpacity
                     style={styles.buttonReg}
                     onPress={handleRegister}>
