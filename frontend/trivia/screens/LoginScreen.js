@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation, dispatch }) => {
             const data = await response.json();
             if (response.ok) {
                 console.log('Login succesful', data.token);
-                navigation.navigate('Home');
+                navigation.navigate('New Game', {screen: 'New Game'});
             } else {
                 console.log('Login failed', data.error);
             }
