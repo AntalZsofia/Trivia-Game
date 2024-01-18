@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const authenticate = async (req, res, next) => {
+    console.log('Authorization header:', req.headers.authorization);
     const token = req.headers.authorization?.split(' ')[1];
-
+    console.log('Extracted token:', token);
     if(!token){
         return res.status(401).json({ error: 'Authentication required.' });
     }
@@ -17,7 +18,7 @@ const authenticate = async (req, res, next) => {
         next();
     }
     catch (err) {
-        console.error(err);
+        console.error('JWT verification error:', err.message);
         res.status(401).json({ error: 'Invalid token.' });
     }
 };
