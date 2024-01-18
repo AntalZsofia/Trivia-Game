@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
 import Register from '../assets/icons/account.png';
+import { AuthContext } from '../context/AuthContext';
 
 const RegisterScreen = ({ navigation, dispatch }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const { setIsLoggedIn } = useContext(AuthContext);
 
 
     const handleRegister = async () => {
@@ -24,8 +26,8 @@ const RegisterScreen = ({ navigation, dispatch }) => {
             });
             const data = await response.json();
             if (response.ok) {
-                console.log('Register succesful', data.token);
-                navigation.navigate('New Game', {screen: 'New Game'})
+                console.log('Register successful', data.token);
+                setIsLoggedIn(true);
             } else {
                 console.log('Register failed', data.error);
             }
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     input: {
+        fontSize: 20,
         width: 200,
         height: 44,
         padding: 10,

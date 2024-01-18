@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
-import Login from '../assets/icons/account.png'
+import Login from '../assets/icons/account.png';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginScreen = ({ navigation, dispatch }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const { setIsLoggedIn, setToken } = useContext(AuthContext);
+    
 
     const handleLogin = async () => {
         if (username === '' || password === '') {
@@ -16,14 +19,16 @@ const LoginScreen = ({ navigation, dispatch }) => {
             const response = await fetch('http://localhost:3000/auth/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ username, password }),
             });
             const data = await response.json();
+            console.log('Received token:', data.token);
             if (response.ok) {
                 console.log('Login succesful', data.token);
-                navigation.navigate('New Game', {screen: 'New Game'});
+                setIsLoggedIn(true);
+                setToken(data.token);
             } else {
                 console.log('Login failed', data.error);
             }
@@ -92,6 +97,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     input: {
+        fontSize: 20,
         width: 200,
         height: 44,
         padding: 10,
