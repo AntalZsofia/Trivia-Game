@@ -82,47 +82,67 @@ function getTabBarVisibility(route) {
 
 function MainTab() {
   return (
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused }) => {
-            let icon;
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
+          let icon;
 
-            switch (route.name) {
-              case 'Account':
-                icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
-                break;
-              case 'New Game':
-                icon = <Image source={Play} style={{ width: 30, height: 30 }} />;
-                break;
-              case 'Friends':
-                icon = <Image source={Friends} style={{ width: 30, height: 30 }} />;
-                break;
-              case 'Leaderboard':
-                icon = <Image source={Leaderboard} style={{ width: 30, height: 30 }} />;
-                break;
-              case 'Tournament':
-                icon = <Image source={Tournament} style={{ width: 30, height: 30 }} />;
-                break;
-              default:
-                icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
-                break;
-            }
-            return icon;
+          switch (route.name) {
+            case 'Account':
+              icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
+              break;
+            case 'New Game':
+              icon = <Image source={Play} style={{ width: 30, height: 30 }} />;
+              break;
+            case 'Friends':
+              icon = <Image source={Friends} style={{ width: 30, height: 30 }} />;
+              break;
+            case 'Leaderboard':
+              icon = <Image source={Leaderboard} style={{ width: 30, height: 30 }} />;
+              break;
+            case 'Tournament':
+              icon = <Image source={Tournament} style={{ width: 30, height: 30 }} />;
+              break;
+            default:
+              icon = <Image source={Home} style={{ width: 30, height: 30 }} />;
+              break;
+          }
+          return icon;
+        },
+        tabBarVisible: getTabBarVisibility(route),
+      })}
+      tabBarOptions={{
+        activeTintColor: 'tomato',
+        inactiveTintColor: 'gray',
+      }}
+    >
+      {/* <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} /> */}
+      <Tab.Screen name="Account" component={AccountScreen}
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
           },
-          tabBarVisible: getTabBarVisibility(route),
-        })}
-        tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
-        }}
-      >
-        {/* <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} /> */}
-        <Tab.Screen name="Account" component={AccountScreen} />
-        <Tab.Screen name="Friends" component={FriendsScreen} />
-        <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false }} />
-        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-        <Tab.Screen name="Tournament" component={TournamentsScreen} />
-      </Tab.Navigator>
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }} />
+      <Tab.Screen name="Friends" component={FriendsScreen} />
+      <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false }} />
+      <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
+      <Tab.Screen name="Tournament" component={TournamentsScreen} />
+    </Tab.Navigator>
   );
 
 }
