@@ -62,7 +62,7 @@ const ResultScreen = ({ route, navigation }) => {
 <Pressable style={styles.buttonTournament} onPress={() => navigation.navigate('TournamentsScreen')}>
         <Text style={styles.buttonText}>Make this a tournament</Text>
     </Pressable>
-    <Pressable style={styles.buttonBack} onPress={() => navigation.navigate('LeaderboardScreen')}>
+    <Pressable style={styles.buttonBack} onPress={() => navigation.navigate('New Game')}>
         <Text style={styles.buttonText}>Back</Text>
     </Pressable>
 </View>
