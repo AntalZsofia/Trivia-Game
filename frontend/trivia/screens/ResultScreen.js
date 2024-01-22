@@ -10,6 +10,28 @@ import AllPoints from '../assets/icons/five-stars.png';
 
 const ResultScreen = ({ route, navigation }) => {
     const questions = route.params;
+    const [totalPoints, setTotalPoints] = useState(0);
+
+    useEffect(() => {
+         const updatePoints = async () => {
+        const response = await fetch('http://localhost:3000/user/details');
+        const data = await response.json();
+        const totalUserPoints = data.points;
+        
+        const newTotalPoints = totalUserPoints + questions.points;
+        setTotalPoints(newTotalPoints);
+        const updateResponse = await fetch('http://localhost:3000/user/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ totalPoints: newTotalPoints, gamesPlayed: data.gamesPlayed + 1 }),
+        });
+        const updateData = await updateResponse.json();
+        console.log(updateData);
+    }
+    updatePoints();
+    }, []);
 
     console.log(questions); 
     return (
@@ -52,7 +74,7 @@ const ResultScreen = ({ route, navigation }) => {
                 <View style={styles.resultDetailsContainer}>
                     <View style={styles.imageAndTextContainer}>
                     <Image source={AllPoints} style={{ width: 30, height: 30, marginLeft: 10 }} />
-                    <Text style={styles.result}>{questions.points}</Text>
+                    <Text style={styles.result}>{totalPoints}</Text>
                     </View>
                     <Text style={styles.resultLabel}>Total points</Text>
                 </View>

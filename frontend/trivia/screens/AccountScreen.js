@@ -60,10 +60,6 @@ const AccountScreen = ({ navigation, dispatch }) => {
                     <Text style={styles.details}>{userDetails?.email}</Text>
                 </View>
                 <View style={styles.detailContainer}>
-                    <Text style={styles.details}>Highscore:</Text>
-                    <Text style={styles.details}>{userDetails?.highscore}</Text>
-                </View>
-                <View style={styles.detailContainer}>
                     <Text style={styles.details}>Total score:</Text>
                     <Text style={styles.details}>{userDetails?.totalScore}</Text>
                 </View>
