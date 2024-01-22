@@ -148,9 +148,10 @@ function MainTab() {
 }
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, token, setToken }}>
       <NavigationContainer>
         {isLoggedIn ? <MainTab /> : <AuthStack />}
       </NavigationContainer>
