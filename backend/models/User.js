@@ -29,7 +29,14 @@ const UserSchema = new mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
-    totalPoints: Number,
+    totalPoints: {
+        type: Number,
+        default: 0
+    },
+    gamesPlayed: {
+        type: Number,
+        default: 0
+    },
     Tournaments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tournament'
