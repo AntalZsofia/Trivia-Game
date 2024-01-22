@@ -9,6 +9,7 @@ const LoginScreen = ({ navigation, dispatch }) => {
     const [password, setPassword] = useState('');
     const { setIsLoggedIn, setToken } = useContext(AuthContext);
     
+    
 
     const handleLogin = async () => {
         if (username === '' || password === '') {
@@ -29,6 +30,7 @@ const LoginScreen = ({ navigation, dispatch }) => {
                 console.log('Login succesful', data.token);
                 setIsLoggedIn(true);
                 setToken(data.token);
+                console.log('loginscreen token:', data.token);
             } else {
                 console.log('Login failed', data.error);
             }
