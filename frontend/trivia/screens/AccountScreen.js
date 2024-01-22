@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import  { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const AccountScreen = ({ navigation, dispatch }) => {
     const [avatar, setAvatar] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
-const { token } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const avatars = ['bunny.jpg', 'fox.jpg', 'lion.jpg'];
 
     // const handleAvatarChange = async () => {
@@ -43,17 +43,38 @@ const { token } = useContext(AuthContext);
     }, [token]);
 
 
-    return(
+    return (
         <View style={styles.container}>
-                <Text style={styles.details}>{userDetails?.avatar}</Text>
+
+            <View style={styles.avatarContainer}>
+            <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+            </View>
+
             <View style={styles.userContainer}>
-                <Image source={{ uri: `http://localhost:3000/uploads/${avatar}` }} style={{ width: 100, height: 100, borderRadius: 50 }} />
-                <Text style={styles.details}>Username: {userDetails?.username}</Text>
-                <Text style={styles.details}>Email: {userDetails?.email}</Text>
-                <Text style={styles.details}>Highscore: {userDetails?.highscore}</Text>
-                <Text style={styles.details}>Total score: {userDetails?.totalScore}</Text>
-                <Text style={styles.details}>Total games played: {userDetails?.totalGamesPlayed}</Text>
-                <Text style={styles.details}>Tournaments: {userDetails?.Tournaments.length}</Text>
+                <View style={styles.detailContainer}>
+                    <Text style={styles.details}>Username:</Text>
+                    <Text style={styles.details}>{userDetails?.username}</Text>
+                </View>
+                <View style={styles.detailContainer}>
+                    <Text style={styles.details}>Email:</Text>
+                    <Text style={styles.details}>{userDetails?.email}</Text>
+                </View>
+                <View style={styles.detailContainer}>
+                    <Text style={styles.details}>Highscore:</Text>
+                    <Text style={styles.details}>{userDetails?.highscore}</Text>
+                </View>
+                <View style={styles.detailContainer}>
+                    <Text style={styles.details}>Total score:</Text>
+                    <Text style={styles.details}>{userDetails?.totalScore}</Text>
+                </View>
+                <View style={styles.detailContainer}>
+                <Text style={styles.details}>Total games played:</Text>
+                <Text style={styles.details}>{userDetails?.totalGamesPlayed}</Text>
+                </View>
+                <View style={styles.detailContainer}>
+                <Text style={styles.details}>Tournaments:</Text>
+                <Text style={styles.details}>{userDetails?.Tournaments.length}</Text>
+                </View>
             </View>
         </View>
     )
@@ -72,6 +93,9 @@ const styles = StyleSheet.create({
         color: '#000000',
         marginBottom: 20,
     },
+    avatarContainer:{
+        marginTop: 20,
+    },
     userContainer: {
         height: 500,
         width: '80%',
@@ -85,12 +109,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: '#FFFFFF',
     },
+    detailContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
     details: {
         fontSize: 20,
-        justifyContent: 'flex-start',
         color: '#000000',
         marginBottom: 10,
-        marginTop: 10,
     },
 });
 
