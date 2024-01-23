@@ -1,29 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'react-native';
 import Questions from '../assets/icons/layer.png';
 import CorrectAnswers from '../assets/icons/checked.png';
 import Points from '../assets/icons/star.png';
 import AllPoints from '../assets/icons/five-stars.png';
+import { AuthContext } from '../context/AuthContext';
 
 
 
 const ResultScreen = ({ route, navigation }) => {
     const questions = route.params;
-    const [totalPoints, setTotalPoints] = useState(0);
+    const [fullScore, setFullScore] = useState(0);
+    const { token } = useContext(AuthContext);
 
     useEffect(() => {
          const updatePoints = async () => {
-        const response = await fetch('http://localhost:3000/user/details');
+        const response = await fetch('http://localhost:3000/user/details', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await response.json();
-        const totalUserPoints = data.points;
-        
+        const totalUserPoints = data.totalPoints;
+        console.log(data);
+        console.log(questions.points);
         const newTotalPoints = totalUserPoints + questions.points;
-        setTotalPoints(newTotalPoints);
+        setFullScore(newTotalPoints);
         const updateResponse = await fetch('http://localhost:3000/user/update', {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ totalPoints: newTotalPoints, gamesPlayed: data.gamesPlayed + 1 }),
         });
@@ -74,7 +84,7 @@ const ResultScreen = ({ route, navigation }) => {
                 <View style={styles.resultDetailsContainer}>
                     <View style={styles.imageAndTextContainer}>
                     <Image source={AllPoints} style={{ width: 30, height: 30, marginLeft: 10 }} />
-                    <Text style={styles.result}>{totalPoints}</Text>
+                    <Text style={styles.result}>{fullScore}</Text>
                     </View>
                     <Text style={styles.resultLabel}>Total points</Text>
                 </View>
