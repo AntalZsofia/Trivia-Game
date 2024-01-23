@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const AccountScreen = ({ navigation, dispatch }) => {
     const [avatar, setAvatar] = useState(null);
@@ -15,8 +16,8 @@ const AccountScreen = ({ navigation, dispatch }) => {
     //     }
     //     handle avatar change
     // }
-
-    useEffect(() => {
+useFocusEffect(
+    useCallback(() => {
         const fetchUserDetails = async () => {
             console.log('token before fetch: ', token)
             try {
@@ -40,7 +41,8 @@ const AccountScreen = ({ navigation, dispatch }) => {
             }
         }
         fetchUserDetails();
-    }, [token]);
+    }, [token])
+);
 
 
     return (
@@ -61,11 +63,11 @@ const AccountScreen = ({ navigation, dispatch }) => {
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.details}>Total score:</Text>
-                    <Text style={styles.details}>{userDetails?.totalScore}</Text>
+                    <Text style={styles.details}>{userDetails?.totalPoints}</Text>
                 </View>
                 <View style={styles.detailContainer}>
                 <Text style={styles.details}>Total games played:</Text>
-                <Text style={styles.details}>{userDetails?.totalGamesPlayed}</Text>
+                <Text style={styles.details}>{userDetails?.gamesPlayed}</Text>
                 </View>
                 <View style={styles.detailContainer}>
                 <Text style={styles.details}>Tournaments:</Text>
