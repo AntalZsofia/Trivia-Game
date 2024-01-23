@@ -40,7 +40,15 @@ const UserSchema = new mongoose.Schema({
     Tournaments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tournament'
-    }]
+    }],
+    Friends: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    FriendRequests: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     });
 
   

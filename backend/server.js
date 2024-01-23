@@ -27,6 +27,8 @@ app.use('/user', userRoutes);
 //Define trivia routes
 app.use('/trivia', triviaRoutes);
 
+//Define friends routes
+app.use('/friends', friendsRoutes);
 
 
 app.listen(port, () => {
