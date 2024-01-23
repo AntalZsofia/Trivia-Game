@@ -3,6 +3,7 @@ const connectDB = require('./db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const triviaRoutes = require('./routes/trivia');
+const friendsRoutes = require('./routes/friends');
 
 const cors = require('cors');
 const app = express();

@@ -1,6 +1,34 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 const User = require('../models/User');
+
+
+//all friends
+const allFriends = async (req, res) => {
+   const authHeader = req.headers.authorization;
+
+   if(!authHeader || !authHeader.startsWith('Bearer ')){
+         return res.status(401).json({ error: 'Invalid token.' });
+    }
+   const token = authHeader.split(' ')[1];
+
+   try{
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId
+    ;
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+    const friends = await User.find({ _id: { $in: user.Friends } });
+    
+    res.status(200).json(friends);
+   }catch(err){
+         console.error('Error:', err);
+         res.status(500).json({ error: 'An error occurred while fetching friends.' });
+}
+};
 
 
 //find user by name
@@ -43,4 +71,4 @@ const sendRequest = async (req, res) => {
     }
 };
 
-module.exports = { findUser, sendRequest };
+module.exports = { allFriends, findUser, sendRequest };
