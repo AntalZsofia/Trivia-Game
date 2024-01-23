@@ -138,7 +138,27 @@ function MainTab() {
             elevation: 5,
           }
         }} />
-      <Tab.Screen name="Friends" component={FriendsScreen} />
+      <Tab.Screen name="Friends" component={FriendsScreen}
+      options={{
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontSize: 25,
+          color: 'black',
+          marginTop: 10,
+        },
+        headerStyle: {
+          height: 80,
+          backgroundColor: '#fff',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }
+      }} />
       <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false }} />
       <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
       <Tab.Screen name="Tournament" component={TournamentsScreen} />
