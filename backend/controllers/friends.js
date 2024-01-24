@@ -48,7 +48,28 @@ const findUser = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while searching for user.' });
     }
 };
+//get all pending requests
+const getAllRequests = async (req, res) => {
+    
+try {
+    const userId = req.params.userId;
 
+    const user = await User.find(userId);
+    if(!user){
+        return res.status(404).json({ error: 'User not found.' });
+    }
+
+    const requests = await User.find({ _id: { $in: user.FriendRequests } });
+    if(!requests){
+        return res.status(404).json({ error: 'No pending requests.' });
+    }
+    res.status(200).json(requests);
+}
+catch(err) {
+    console.error('Error:', err);
+    res.status(500).json({ error: 'An error occurred while fetching requests.' });
+}
+};
 
 //send friend request
 const sendRequest = async (req, res) => {
@@ -97,4 +118,4 @@ const acceptRequest = async (req, res) => {
 };
 
 
-module.exports = { allFriends, findUser, sendRequest, acceptRequest };
+module.exports = { allFriends, findUser, getAllRequests, sendRequest, acceptRequest };
