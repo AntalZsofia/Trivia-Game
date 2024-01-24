@@ -33,7 +33,7 @@ const allFriends = async (req, res) => {
 
 //find user by name
 const findUser = async (req, res) => {
-    const { username } = req.body;
+    const { username } = req.query;
 
     try {
         const user = await User.findOne({ username: { $regex: username, $options: 'i' } });
