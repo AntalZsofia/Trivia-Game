@@ -71,4 +71,30 @@ const sendRequest = async (req, res) => {
     }
 };
 
-module.exports = { allFriends, findUser, sendRequest };
+//Accept friend request
+const acceptRequest = async (req, res) => {
+    const { senderId, receiverId } = req.body;
+
+    try {
+        const sender = await User.findById(senderId);
+        const receiver = await User.findById(receiverId);
+
+        if(!receiver.FriendRequests.includes(senderId)){
+            return res.status(400).json({ error: 'No friend request from this user.' });
+        }
+
+        sender.Friends.push(receiverId);
+        receiver.Friends.push(senderId);
+        sender.FriendRequests = sender.FriendRequests.filter((request) => request.toString() !== receiverId.toString());
+        await sender.save();
+        await receiver.save();
+
+        res.status(200).json({ message: 'Friend request accepted.' });
+    } catch(err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while accepting friend request.' });
+    }
+};
+
+
+module.exports = { allFriends, findUser, sendRequest, acceptRequest };
