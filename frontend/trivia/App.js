@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import AccountScreen from './screens/AccountScreen';
 import SetUpQuizScreen from './screens/SetUpQuizScreen';
 import FriendsScreen from './screens/FriendsScreen';
+import PendingRequestsScreen from './screens/PendingRequestsScreen';
 import LeaderboardScreen from './screens/LeaderboardScreen';
 import TournamentsScreen from './screens/TournamentsScreen';
 import QuizScreen from './screens/QuizScreen';
@@ -66,6 +67,56 @@ function SetUpQuizStack() {
       <Stack.Screen name="ResultScreen" component={ResultScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
+}
+
+function FriendsStack() {
+  return (
+    <Stack.Navigator>
+       <Stack.Screen name="Friends" component={FriendsScreen} 
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }} 
+      />
+      <Stack.Screen name="Pending Requests" component={PendingRequestsScreen}
+      options={{
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontSize: 25,
+          color: 'black',
+          marginTop: 10,
+        },
+        headerStyle: {
+          height: 80,
+          backgroundColor: '#fff',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }
+      }}  />
+    </Stack.Navigator>
+  )
 }
 function getTabBarVisibility(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
@@ -138,27 +189,7 @@ function MainTab() {
             elevation: 5,
           }
         }} />
-      <Tab.Screen name="Friends" component={FriendsScreen}
-      options={{
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 25,
-          color: 'black',
-          marginTop: 10,
-        },
-        headerStyle: {
-          height: 80,
-          backgroundColor: '#fff',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }
-      }} />
+      <Tab.Screen name="Friends" component={FriendsStack} options={{ headerShown: false }}/>
       <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false }} />
       <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
       <Tab.Screen name="Tournament" component={TournamentsScreen} />
