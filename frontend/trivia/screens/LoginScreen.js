@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 const LoginScreen = ({ navigation, dispatch }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { setIsLoggedIn, setToken } = useContext(AuthContext);
+    const { setIsLoggedIn, setToken, setUserId } = useContext(AuthContext);
     
     
 
@@ -30,6 +30,7 @@ const LoginScreen = ({ navigation, dispatch }) => {
                 console.log('Login succesful', data.token);
                 setIsLoggedIn(true);
                 setToken(data.token);
+                setUserId(data.userId);
                 console.log('loginscreen token:', data.token);
             } else {
                 console.log('Login failed', data.error);
