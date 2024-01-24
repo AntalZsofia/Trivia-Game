@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, FlatList, Image, StyleSheet, Pressable, TextInput, TouchableOpacity } from 'react-native';
 
-export default function FriendsScreen() {
+export default function FriendsScreen( {navigation}) {
   const { token } = useContext(AuthContext);
   const [friends, setFriends] = useState(null);
 
@@ -30,6 +30,11 @@ export default function FriendsScreen() {
     }
     fetchFriends();
   }, [token]);
+
+  const handlePendingRequests = () => {
+    navigation.navigate('Pending Requests');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchFriendsContainer}>
@@ -40,9 +45,9 @@ export default function FriendsScreen() {
       </View>
 
       <View style={styles.friendRequestsContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('PendingRequests')}>
+        <Pressable onPress={handlePendingRequests}>
           <Text style={styles.friendRequestsButtonText}>Pending requests</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.friendList}>
