@@ -35,11 +35,33 @@ export default function FriendsScreen( {navigation}) {
     navigation.navigate('Pending Requests');
   };
 
+  const handleSearchFriend = (username) => {
+    // search for friend by username
+    const fetchsearchFriend = async () => {
+      const response = await fetch(`http://localhost:3000/friends/findUser?username=${username}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+      });
+      if(!response.ok){
+        console.error('Failed to search friend:', await response.text());
+        return;
+      }
+      const data = await response.json();
+      console.log('Search result:', data);
+  };
+  fetchsearchFriend();
+};
+
   return (
     <View style={styles.container}>
       <View style={styles.searchFriendsContainer}>
         <TextInput style={styles.searchFriendsInput} placeholder="Search for friends" />
-        <Pressable style={styles.searchFriendsButton}>
+        <Pressable 
+          style={styles.searchFriendsButton}
+          onPress={handleSearchFriend}>
           <Text style={styles.searchFriendsButtonText}>Search</Text>
         </Pressable>
       </View>
@@ -69,7 +91,7 @@ export default function FriendsScreen( {navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5',
   },
   searchFriendsContainer: {
     flexDirection: 'row',
@@ -82,21 +104,27 @@ const styles = StyleSheet.create({
     width: '70%',
     height: 40,
     borderWidth: 1,
+    backgroundColor: 'white',
     borderColor: 'black',
     borderRadius: 10,
     paddingLeft: 10,
+    fontSize: 20,
   },
   searchFriendsButton: {
     width: '25%',
     height: 40,
-    backgroundColor: '#172A3A',
+    backgroundColor: '#09BC8A',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   searchFriendsButtonText: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 20,
   },
   friendRequestsContainer: {
     marginHorizontal: 20,
@@ -114,11 +142,12 @@ const styles = StyleSheet.create({
   friendRequestsButtonText: {
     color: 'black',
     fontSize: 20,
-    fontStyle: 'bold'
+    fontWeight: 'bold',
   },
 
   friendList: {
-    marginTop: 20,
+    marginTop: 40,
+
   },
 
   friend: {
