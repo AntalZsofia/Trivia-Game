@@ -59,7 +59,11 @@ try {
         return res.status(404).json({ error: 'User not found.' });
     }
 
-    const requests = await User.find({ _id: { $in: user.FriendRequests } });
+    const receivedRequests = await User.find({ _id: { $in: user.ReceivedFriendRequests } });
+    const sentRequests = await User.find({ _id: { $in: user.SentFriendRequests } });
+
+    const requests = receivedRequests.concat(sentRequests);
+
     if(!requests){
         return res.status(404).json({ error: 'No pending requests.' });
     }
@@ -77,16 +81,22 @@ const sendRequest = async (req, res) => {
 
     try {
         const receiver = await User.findById(receiverId);
+        const sender = await User.findById(senderId);
 
+        if(!sender){
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        
         if(!receiver){
             return res.status(404).json({ error: 'User not found.' });
         }
         
-        if(receiver.FriendRequests.includes(senderId)){
+        if(receiver.ReceivedFriendRequests.includes(senderId)){
             return res.status(400).json({ error: 'Friend request already sent.' });
         }
 
-        receiver.FriendRequests.push(senderId);
+        receiver.ReceivedFriendRequests.push(senderId);
+        sender.SentFriendRequests.push(receiverId);
         await receiver.save();
 
         res.status(200).json({ message: 'Friend request sent.' });
@@ -104,13 +114,14 @@ const acceptRequest = async (req, res) => {
         const sender = await User.findById(senderId);
         const receiver = await User.findById(receiverId);
 
-        if(!receiver.FriendRequests.includes(senderId)){
+        if(!receiver.ReceivedFriendRequests.includes(senderId)){
             return res.status(400).json({ error: 'No friend request from this user.' });
         }
 
         sender.Friends.push(receiverId);
         receiver.Friends.push(senderId);
-        sender.FriendRequests = sender.FriendRequests.filter((request) => request.toString() !== receiverId.toString());
+        sender.SentFriendRequests = sender.FriendRequests.filter((request) => request.toString() !== receiverId.toString());
+        receiver.ReceivedFriendRequests = receiver.FriendRequests.filter((request) => request.toString() !== senderId.toString());
         await sender.save();
         await receiver.save();
 
@@ -121,5 +132,35 @@ const acceptRequest = async (req, res) => {
     }
 };
 
+//Decline friend request
+const declineRequest = async (req, res) => {
+    const { senderId, receiverId } = req.body;
 
-module.exports = { allFriends, findUser, getAllRequests, sendRequest, acceptRequest };
+    try {
+        const sender = await User.findById(senderId);
+        const receiver = await User.findById(receiverId);
+
+        if (!sender) {
+            return res.status(404).json({ error: 'Sender not found.' });
+        }
+
+        if (!receiver) {
+            return res.status(404).json({ error: 'Receiver not found.' });
+        }
+
+        if(!receiver.ReceivedFriendRequests.includes(senderId)){
+            return res.status(400).json({ error: 'No friend request from this user.' });
+        }
+
+        sender.SentFriendRequests = sender.SentFriendRequests.filter((request) => request.toString() !== receiverId.toString());
+        await sender.save();
+
+        res.status(200).json({ message: 'Friend request declined.' });
+    } catch(err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while declining friend request.' });
+    }
+};
+
+
+module.exports = { allFriends, findUser, getAllRequests, sendRequest, acceptRequest, declineRequest };
