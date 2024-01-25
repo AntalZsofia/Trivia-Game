@@ -36,16 +36,16 @@ const findUser = async (req, res) => {
     const { username } = req.query;
 
     try {
-        const user = await User.findOne({ username: { $regex: username, $options: 'i' } });
+        const users = await User.find({ username: { $regex: username, $options: 'i' } });
     
-    if(!user){
-        return res.status(404).json({ error: 'User not found.' });
+    if(!users || users.length === 0){
+        return res.status(404).json({ error: 'No users found.' });
 
     }
-    res.status(200).json(user);
+    return res.status(200).json(users);
     } catch(err) {
         console.error('Error:', err);
-        res.status(500).json({ error: 'An error occurred while searching for user.' });
+       return res.status(500).json({ error: 'An error occurred while searching for user.' });
     }
 };
 //get all pending requests
@@ -78,6 +78,10 @@ const sendRequest = async (req, res) => {
     try {
         const receiver = await User.findById(receiverId);
 
+        if(!receiver){
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        
         if(receiver.FriendRequests.includes(senderId)){
             return res.status(400).json({ error: 'Friend request already sent.' });
         }
