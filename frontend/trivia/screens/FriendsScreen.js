@@ -2,9 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, FlatList, Image, StyleSheet, Pressable, TextInput, TouchableOpacity } from 'react-native';
 
-export default function FriendsScreen( {navigation}) {
-  const { token } = useContext(AuthContext);
-  const [friends, setFriends] = useState(null);
+export default function FriendsScreen({ navigation }) {
+  const { token, userId } = useContext(AuthContext);
+  const [friends, setFriends] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -35,36 +37,80 @@ export default function FriendsScreen( {navigation}) {
     navigation.navigate('Pending Requests');
   };
 
-  const handleSearchFriend = (username) => {
+  const handleSearchUser = async () => {
     // search for friend by username
-    const fetchsearchFriend = async () => {
-      const response = await fetch(`http://localhost:3000/friends/findUser?username=${username}`, {
+    const fetchsearchUser = async () => {
+      const response = await fetch(`http://localhost:3000/friends/findUser?username=${searchInput}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+          'Authorization': `Bearer ${token}`
+        },
       });
-      if(!response.ok){
+      if (!response.ok) {
         console.error('Failed to search friend:', await response.text());
         return;
       }
       const data = await response.json();
-      console.log('Search result:', data);
+      setSearchResults(data);
+
+    };
+    fetchsearchUser();
   };
-  fetchsearchFriend();
-};
+
+  const sendFriendRequest = async (receiverId) => {
+    const senderId = userId;
+
+    const response = await fetch('http://localhost:3000/friends/sendRequest', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({senderId, receiverId}),
+    });
+    if(!response.ok){
+      console.error('Failed to send friend request:', await response.text());
+      return;
+    }
+    const data = await response.json(); 
+    console.log('Friend request sent successfully', data);
+  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchFriendsContainer}>
-        <TextInput style={styles.searchFriendsInput} placeholder="Search for friends" />
-        <Pressable 
-          style={styles.searchFriendsButton}
-          onPress={handleSearchFriend}>
-          <Text style={styles.searchFriendsButtonText}>Search</Text>
+      <View style={styles.searchUserContainer}>
+        <TextInput
+          style={styles.searchUserInput}
+          placeholder="Search new friends"
+          onChangeText={text => setSearchInput(text)}
+          value={searchInput}
+        />
+        <Pressable
+          style={styles.searchUserButton}
+          onPress={handleSearchUser}>
+          <Text style={styles.searchUserButtonText}>Search</Text>
         </Pressable>
       </View>
+
+
+      {searchResults.length > 0 && (
+        <View style={styles.friendList}>
+          <Text style={styles.resultTitle}>Results</Text>
+          <FlatList
+            data={searchResults}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => sendFriendRequest(item._id)}>
+              <View style={styles.friend}>
+                <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+                <Text style={styles.friendName}>{item.username}</Text>
+              </View>
+              </Pressable>
+            )}
+            keyExtractor={(item) => item._id}
+          />
+        </View>
+      )}
 
       <View style={styles.friendRequestsContainer}>
         <Pressable onPress={handlePendingRequests}>
@@ -86,21 +132,22 @@ export default function FriendsScreen( {navigation}) {
         />
       </View>
     </View>
-  )
+  );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
   },
-  searchFriendsContainer: {
+  searchUserContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 20,
     marginTop: 40,
   },
-  searchFriendsInput: {
+  searchUserInput: {
     width: '70%',
     height: 40,
     borderWidth: 1,
@@ -110,7 +157,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 20,
   },
-  searchFriendsButton: {
+  searchUserButton: {
     width: '25%',
     height: 40,
     backgroundColor: '#09BC8A',
@@ -122,23 +169,21 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
-  searchFriendsButtonText: {
+  searchUserButtonText: {
     color: 'white',
     fontSize: 20,
+  },
+  resultTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginBottom: 10,
   },
   friendRequestsContainer: {
     marginHorizontal: 20,
     marginTop: 40,
 
   },
-  // friendRequestsButton: {
-  //   width: '100%',
-  //   height: 40,
-  //   backgroundColor: '#172A3A',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   borderRadius: 10,
-  // },
   friendRequestsButtonText: {
     color: 'black',
     fontSize: 20,
@@ -152,12 +197,20 @@ const styles = StyleSheet.create({
 
   friend: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     marginHorizontal: 20,
     marginBottom: 20,
+    borderColor: 'grey',
+    backgroundColor: '#E0F8FD',
+    borderWidth: 1,
+    borderRadius: 8,
+
   },
   friendName: {
     fontSize: 20,
+    marginLeft: 20,
+    textAlign: 'center',
+    fontWeight: 'bold', 
   },
 });
