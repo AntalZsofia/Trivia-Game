@@ -4,11 +4,38 @@ import { AuthContext } from '../context/AuthContext';
 
 export default function PendingRequestsScreen({ navigation }) {
     const { token, userId } = useContext(AuthContext);
+    console.log(token);
     const [requests, setRequests] = useState([]);
 
-    
+    const fetchRequests = async () => {
+        try{
+          const response = await fetch('http://localhost:3000/friends/requests', {
+            method: 'GET',
+            headers: {  
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+              },
+              });
+              const data = await response.json();
+              if(response.ok){
+                console.log('Friend requests fetched successfully', data);
+                setRequests(data);
+              }
+              else{
+                console.log('Fetching friend requests failed', data.error);
+              }
+        }
+        catch(err){
+            console.error(err);
+        } 
+    }
+    useEffect (() => {
+        fetchRequests();
+    }, [token]);
+
+
     const handleAccept = async (id) => {
-        const response = await fetch(`http://localhost:3000/friends/requests/accept`, {
+        const response = await fetch(`http://localhost:3000/friends/acceptRequest`, {
            method: 'POST',
            headers: {
             'Authorization': `Bearer ${token}`,
@@ -30,6 +57,25 @@ export default function PendingRequestsScreen({ navigation }) {
     };
 
     const handleDecline = async (id) => {
+      const response = await fetch(`http://localhost:3000/friends/acceptRequest`, {
+           method: 'POST',
+           headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+           },
+           body: JSON.stringify({
+            senderId: id,
+            receiverId: userId,
+           }),
+        });
+        if(response.ok){
+            console.log('Friend request accepted successfully');
+            fetchRequests();
+        }
+        else{
+            const data = await response.json();
+            console.log('Friend request acceptance failed', data.error);
+        }
     };
 
     return (
