@@ -6,16 +6,10 @@ import { useFocusEffect } from '@react-navigation/native';
 const AccountScreen = ({ navigation, dispatch }) => {
     const [avatar, setAvatar] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
-    const { token } = useContext(AuthContext);
+    const { token, userId } = useContext(AuthContext);
     const avatars = ['bunny.jpg', 'fox.jpg', 'lion.jpg'];
 
-    // const handleAvatarChange = async () => {
-    //     if (avatar === null) {
-    //         alert('Please select an avatar.');
-    //         return;
-    //     }
-    //     handle avatar change
-    // }
+
 useFocusEffect(
     useCallback(() => {
         const fetchUserDetails = async () => {
@@ -66,12 +60,16 @@ useFocusEffect(
                     <Text style={styles.details}>{userDetails?.totalPoints}</Text>
                 </View>
                 <View style={styles.detailContainer}>
-                <Text style={styles.details}>Total games played:</Text>
+                <Text style={styles.details}>Games played:</Text>
                 <Text style={styles.details}>{userDetails?.gamesPlayed}</Text>
                 </View>
                 <View style={styles.detailContainer}>
                 <Text style={styles.details}>Tournaments:</Text>
                 <Text style={styles.details}>{userDetails?.Tournaments.length}</Text>
+                </View>
+                <View style={styles.detailContainer}>
+                <Text style={styles.details}>Friends:</Text>
+                <Text style={styles.details}>{userDetails?.Friends.length}</Text>
                 </View>
             </View>
         </View>
