@@ -8,7 +8,8 @@ const LoginScreen = ({ navigation, dispatch }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { setIsLoggedIn, setToken, setUserId } = useContext(AuthContext);
-    
+    const authContext = useContext(AuthContext);
+    console.log(authContext);
     
 
     const handleLogin = async () => {
@@ -25,12 +26,15 @@ const LoginScreen = ({ navigation, dispatch }) => {
                 body: JSON.stringify({ username, password }),
             });
             const data = await response.json();
+            console.log(data);
             console.log('Received token:', data.token);
+            console.log('Received userId:', data.userId);
             if (response.ok) {
                 console.log('Login succesful', data.token);
                 setIsLoggedIn(true);
                 setToken(data.token);
                 setUserId(data.userId);
+                console.log('Loginscreen userId: ', data.userId);
                 console.log('loginscreen token:', data.token);
             } else {
                 console.log('Login failed', data.error);

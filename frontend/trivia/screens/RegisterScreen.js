@@ -8,7 +8,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const { setIsLoggedIn } = useContext(AuthContext);
+    const { setIsLoggedIn, setToken, setUserId } = useContext(AuthContext);
 
 
     const handleRegister = async () => {
@@ -28,6 +28,8 @@ const RegisterScreen = ({ navigation, dispatch }) => {
             if (response.ok) {
                 console.log('Register successful', data.token);
                 setIsLoggedIn(true);
+                setToken(data.token);
+                setUserId(data.userId);
             } else {
                 console.log('Register failed', data.error);
             }
