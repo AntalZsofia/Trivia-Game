@@ -49,31 +49,51 @@ const findUser = async (req, res) => {
     }
 };
 //get all pending requests
-const getAllRequests = async (req, res) => {
+const getReceivedRequests = async (req, res) => {
     
 try {
     const userId = req.params.userId;
-
-    const user = await User.find(userId);
+console.log('userId', userId);
+    const user = await User.findById(userId);
     if(!user){
         return res.status(404).json({ error: 'User not found.' });
     }
 
     const receivedRequests = await User.find({ _id: { $in: user.ReceivedFriendRequests } });
-    const sentRequests = await User.find({ _id: { $in: user.SentFriendRequests } });
 
-    const requests = receivedRequests.concat(sentRequests);
-
-    if(!requests){
-        return res.status(404).json({ error: 'No pending requests.' });
+    if(receivedRequests.length === 0){
+        return res.status(404).json({ error: 'No received requests.' });
     }
-    res.status(200).json(requests);
+    res.status(200).json(receivedRequests);
 }
 catch(err) {
     console.error('Error:', err);
     res.status(500).json({ error: 'An error occurred while fetching requests.' });
 }
 };
+
+//get all sent requests
+const getSentRequests = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+    console.log('userId', userId);
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({ error: 'User not found.' });
+        }
+    
+        const sentRequests = await User.find({ _id: { $in: user.SentFriendRequests } });
+    
+        if(sentRequests.length === 0){
+            return res.status(404).json({ error: 'No sent requests.' });
+        }
+        res.status(200).json(sentRequests);
+    }
+    catch(err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while fetching requests.' });
+    }
+}
 
 //send friend request
 const sendRequest = async (req, res) => {
@@ -121,8 +141,8 @@ const acceptRequest = async (req, res) => {
 
         sender.Friends.push(receiverId);
         receiver.Friends.push(senderId);
-        sender.SentFriendRequests = sender.FriendRequests.filter((request) => request.toString() !== receiverId.toString());
-        receiver.ReceivedFriendRequests = receiver.FriendRequests.filter((request) => request.toString() !== senderId.toString());
+        sender.SentFriendRequests = sender.SentFriendRequests.filter((request) => request.toString() !== receiverId.toString());
+        receiver.ReceivedFriendRequests = receiver.ReceiverFriendRequests.filter((request) => request.toString() !== senderId.toString());
         await sender.save();
         await receiver.save();
 
@@ -164,4 +184,4 @@ const declineRequest = async (req, res) => {
 };
 
 
-module.exports = { allFriends, findUser, getAllRequests, sendRequest, acceptRequest, declineRequest };
+module.exports = { allFriends, findUser, getReceivedRequests, getSentRequests, sendRequest, acceptRequest, declineRequest };
