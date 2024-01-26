@@ -1,6 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
+import { Image } from 'react-native';
+import Accept from '../assets/icons/accept.png';
+import Decline from '../assets/icons/decline.png';
 
 export default function PendingRequestsScreen({ navigation }) {
     const { token, userId } = useContext(AuthContext);
@@ -117,7 +120,7 @@ export default function PendingRequestsScreen({ navigation }) {
                   style={styles.declineButton}
                   onPress={() => handleDecline(item._id)}
                 >
-                  <Text style={styles.buttonText}>Cancel</Text>
+                  <Image source={Decline} style={{ width: 30, height: 30 }} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -135,13 +138,15 @@ export default function PendingRequestsScreen({ navigation }) {
                   style={styles.acceptButton}
                   onPress={() => handleAccept(item._id)}
                 >
-                  <Text style={styles.buttonText}>Accept</Text>
+                  <Image source={Accept} style={{ width: 30, height: 30 }} />
+                  
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.declineButton}
                   onPress={() => handleDecline(item._id)}
                 >
-                  <Text style={styles.buttonText}>Decline</Text>
+                  <Image source={Decline} style={{ width: 30, height: 30 }} />
+                 
                 </TouchableOpacity>
               </View>
             </View>
@@ -182,15 +187,12 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         flexDirection: 'row',
-        backgroundColor: 'red',
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '30%'
     },
-    button: {
-        backgroundColor: 'green',
-        padding: 10,
-        borderRadius: 5
+    declineButton: {
+        marginLeft: 10,
     },
     buttonText: {
         color: 'white'

@@ -1,4 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native'; 
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, FlatList, Image, StyleSheet, Pressable, TextInput, TouchableOpacity } from 'react-native';
 
@@ -10,7 +11,8 @@ export default function FriendsScreen({ navigation }) {
 
   console.log(userId);
 
-  useEffect(() => {
+  useFocusEffect(
+  useCallback(() => {
     const fetchFriends = async () => {
       try {
 
@@ -33,7 +35,8 @@ export default function FriendsScreen({ navigation }) {
       }
     }
     fetchFriends();
-  }, [token, userId]);
+  }, [token, userId])
+  );
 
   const handlePendingRequests = () => {
     navigation.navigate('Pending Requests');
