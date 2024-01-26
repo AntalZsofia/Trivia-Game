@@ -8,8 +8,7 @@ const LoginScreen = ({ navigation, dispatch }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { setIsLoggedIn, setToken, setUserId } = useContext(AuthContext);
-    const authContext = useContext(AuthContext);
-    console.log(authContext);
+   
     
 
     const handleLogin = async () => {
