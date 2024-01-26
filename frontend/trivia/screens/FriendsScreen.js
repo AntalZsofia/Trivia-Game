@@ -8,6 +8,8 @@ export default function FriendsScreen({ navigation }) {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
+  console.log(userId);
+
   useEffect(() => {
     const fetchFriends = async () => {
       try {
@@ -31,7 +33,7 @@ export default function FriendsScreen({ navigation }) {
       }
     }
     fetchFriends();
-  }, [token]);
+  }, [token, userId]);
 
   const handlePendingRequests = () => {
     navigation.navigate('Pending Requests');
@@ -59,15 +61,17 @@ export default function FriendsScreen({ navigation }) {
   };
 
   const sendFriendRequest = async (receiverId) => {
-    const senderId = userId;
+    
+    console.log('receiver: ', receiverId);
+    console.log('sender: ', userId);
 
-    const response = await fetch('http://localhost:3000/friends/sendRequest', {
+    const response = await fetch('http://localhost:3000/friends/send_request', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({senderId, receiverId}),
+      body: JSON.stringify({senderId: userId, receiverId}),
     });
     if(!response.ok){
       console.error('Failed to send friend request:', await response.text());
