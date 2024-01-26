@@ -142,7 +142,7 @@ const acceptRequest = async (req, res) => {
         sender.Friends.push(receiverId);
         receiver.Friends.push(senderId);
         sender.SentFriendRequests = sender.SentFriendRequests.filter((request) => request.toString() !== receiverId.toString());
-        receiver.ReceivedFriendRequests = receiver.ReceiverFriendRequests.filter((request) => request.toString() !== senderId.toString());
+        receiver.ReceivedFriendRequests = receiver.ReceivedFriendRequests.filter((request) => request.toString() !== senderId.toString());
         await sender.save();
         await receiver.save();
 
