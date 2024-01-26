@@ -4,12 +4,12 @@ import { AuthContext } from '../context/AuthContext';
 
 export default function PendingRequestsScreen({ navigation }) {
     const { token, userId } = useContext(AuthContext);
-    console.log(token);
-    const [requests, setRequests] = useState([]);
+    const [sentRequests, setSentRequests] = useState([]);
+    const [receivedRequests, setReceivedRequests] = useState([]);
 
-    const fetchRequests = async () => {
+    const fetchSentRequests = async () => {
         try{
-          const response = await fetch('http://localhost:3000/friends/requests', {
+          const response = await fetch(`http://localhost:3000/friends/requests/sent/${userId}`, {
             method: 'GET',
             headers: {  
               'Authorization': `Bearer ${token}`,
@@ -19,7 +19,7 @@ export default function PendingRequestsScreen({ navigation }) {
               const data = await response.json();
               if(response.ok){
                 console.log('Friend requests fetched successfully', data);
-                setRequests(data);
+                setSentRequests(data);
               }
               else{
                 console.log('Fetching friend requests failed', data.error);
@@ -29,12 +29,36 @@ export default function PendingRequestsScreen({ navigation }) {
             console.error(err);
         } 
     }
-    useEffect (() => {
-        fetchRequests();
-    }, [token]);
+    
+    const fetchReceivedRequests = async () => {
+      try{
+        const response = await fetch(`http://localhost:3000/friends/requests/received/${userId}`, {
+          method: 'GET',
+          headers: {  
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
+        const data = await response.json();
+        if(response.ok){
+          console.log('Friend requests fetched successfully', data);
+          setReceivedRequests(data);
+        }
+        else{
+          console.log('Fetching friend requests failed', data.error);
+        } 
+      }
+      catch(err){
+        console.error(err);
+      }
+    }
 
-
-    const handleAccept = async (id) => {
+      useEffect (() => {
+          fetchSentRequests();
+          fetchReceivedRequests();
+      }, [token]);
+      
+      const handleAccept = async (id) => {
         const response = await fetch(`http://localhost:3000/friends/acceptRequest`, {
            method: 'POST',
            headers: {
@@ -48,7 +72,8 @@ export default function PendingRequestsScreen({ navigation }) {
         });
         if(response.ok){
             console.log('Friend request accepted successfully');
-            fetchRequests();
+            fetchSentRequests();
+            fetchReceivedRequests();
         }
         else{
             const data = await response.json();
@@ -70,7 +95,8 @@ export default function PendingRequestsScreen({ navigation }) {
         });
         if(response.ok){
             console.log('Friend request accepted successfully');
-            fetchRequests();
+            fetchSentRequests();
+            fetchReceivedRequests();
         }
         else{
             const data = await response.json();
@@ -79,32 +105,51 @@ export default function PendingRequestsScreen({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-          <FlatList
-            data={requests}
-            renderItem={({ item }) => (
-              <View style={styles.request}>
-                <Text style={styles.requestText}>{item.username} wants to be your friend!</Text>
-                <View style={styles.buttonsContainer}>
-                  <TouchableOpacity
-                    style={styles.acceptButton}
-                    onPress={() => handleAccept(item._id)}
-                  >
-                    <Text style={styles.buttonText}>Accept</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.declineButton}
-                    onPress={() => handleDecline(item._id)}
-                  >
-                    <Text style={styles.buttonText}>Decline</Text>
-                  </TouchableOpacity>
-                </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Sent Requests</Text>
+        <FlatList
+          data={sentRequests}
+          renderItem={({ item }) => (
+            <View style={styles.request}>
+              <Text style={styles.requestText}>You sent a friend request to {item.username}!</Text>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={styles.declineButton}
+                  onPress={() => handleDecline(item._id)}
+                >
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
               </View>
-            )}
-            keyExtractor={(item) => item._id}
-          />
-        </View>
-      );
+            </View>
+          )}
+          keyExtractor={(item) => item._id}
+        />
+        <Text style={styles.title}>Received Requests</Text>
+        <FlatList
+          data={receivedRequests}
+          renderItem={({ item }) => (
+            <View style={styles.request}>
+              <Text style={styles.requestText}>{item.username} wants to be your friend!</Text>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={styles.acceptButton}
+                  onPress={() => handleAccept(item._id)}
+                >
+                  <Text style={styles.buttonText}>Accept</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.declineButton}
+                  onPress={() => handleDecline(item._id)}
+                >
+                  <Text style={styles.buttonText}>Decline</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+          keyExtractor={(item) => item._id}
+        />
+      </View>
+    );
 
 
 };
@@ -115,6 +160,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      marginTop: 20,
+      marginBottom: 10,
     },
     request: {
         flexDirection: 'row',
@@ -131,7 +182,9 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         flexDirection: 'row',
+        backgroundColor: 'red',
         justifyContent: 'space-between',
+        alignItems: 'center',
         width: '30%'
     },
     button: {
