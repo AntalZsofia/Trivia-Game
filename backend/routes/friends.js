@@ -6,7 +6,7 @@ const { allFriends, findUser, getAllRequests, sendRequest, acceptRequest, declin
 router.get('/all', allFriends);
 router.get('/findUser', findUser);
 router.get('/requests', getAllRequests);
-router.post('/sendRequest', sendRequest );
+router.post('/send_request', sendRequest );
 router.post('/acceptRequest', acceptRequest );
 router.post('/declineRequest', declineRequest);
 

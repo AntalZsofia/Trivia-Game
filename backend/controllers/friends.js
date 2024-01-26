@@ -98,6 +98,7 @@ const sendRequest = async (req, res) => {
         receiver.ReceivedFriendRequests.push(senderId);
         sender.SentFriendRequests.push(receiverId);
         await receiver.save();
+        await sender.save();
 
         res.status(200).json({ message: 'Friend request sent.' });
     } catch(err) {

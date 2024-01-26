@@ -53,7 +53,7 @@ const login = async (req, res, next) => {
             expiresIn: '7d'
         });
         console.log('Token signed:', token);
-        res.json({token})
+        res.json({token, userId: user._id})
         }
     catch (err) {
         console.error(err);
