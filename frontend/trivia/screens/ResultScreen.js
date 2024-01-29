@@ -44,6 +44,7 @@ const ResultScreen = ({ route, navigation }) => {
     }, []);
 
     const handleSaveTournament = async () => {
+        
         try{
             const response = await fetch('http://localhost:3000/tournament/create', {
                 method: 'POST',
@@ -51,11 +52,20 @@ const ResultScreen = ({ route, navigation }) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ category: questions.category, difficulty: questions.difficulty, totalQuestions: questions.totalQuestions, correctAnswers: questions.correctAnswers, points: questions.points, totalPoints: fullScore }),
+                body: JSON.stringify({ 
+                    category: questions.category, 
+                    difficulty: questions.difficulty, 
+                    questions: questions.questions,
+                    users: [{
+                        user: user._id,
+                        score: score
+                    }] 
+                    
+                 }),
             });
             const data = await response.json();
             console.log(data);
-            navigation.navigate('Tournament');
+            navigation.navigate('Name tournament', { tournamentId: data._id });
                 }
                 catch(err){
                     console.log(err);
