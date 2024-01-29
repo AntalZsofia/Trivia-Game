@@ -28,9 +28,11 @@ const createTournament = async (req, res) => {
             name,
             category,
             difficulty,
-            type,
             questions,
-            user: [userId]
+            users: [{
+                user: user._id,
+                score: 0
+            }]
         });
 
         await tournament.save();
