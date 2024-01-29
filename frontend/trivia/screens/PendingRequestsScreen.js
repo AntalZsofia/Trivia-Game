@@ -1,7 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import { Image } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Accept from '../assets/icons/accept.png';
 import Decline from '../assets/icons/decline.png';
 
@@ -55,11 +56,6 @@ export default function PendingRequestsScreen({ navigation }) {
         console.error(err);
       }
     }
-
-      useEffect (() => {
-          fetchSentRequests();
-          fetchReceivedRequests();
-      }, [token]);
       
       const handleAccept = async (id) => {
         const response = await fetch(`http://localhost:3000/friends/acceptRequest`, {
@@ -85,7 +81,7 @@ export default function PendingRequestsScreen({ navigation }) {
     };
 
     const handleDecline = async (id) => {
-      const response = await fetch(`http://localhost:3000/friends/acceptRequest`, {
+      const response = await fetch(`http://localhost:3000/friends/declineRequest`, {
            method: 'POST',
            headers: {
             'Authorization': `Bearer ${token}`,
@@ -97,15 +93,24 @@ export default function PendingRequestsScreen({ navigation }) {
            }),
         });
         if(response.ok){
-            console.log('Friend request accepted successfully');
-            fetchSentRequests();
-            fetchReceivedRequests();
+            console.log('Friend request declined successfully');
+            
         }
         else{
             const data = await response.json();
-            console.log('Friend request acceptance failed', data.error);
+            console.log('Friend request decline failed', data.error);
         }
     };
+
+    useFocusEffect(
+      useCallback(() => {
+        const fetchRequests = async () => {
+          await fetchSentRequests();
+          await fetchReceivedRequests();
+        };
+        fetchRequests();
+      }, [token])
+    );
 
     return (
       <View style={styles.container}>

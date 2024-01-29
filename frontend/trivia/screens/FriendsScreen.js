@@ -108,7 +108,7 @@ export default function FriendsScreen({ navigation }) {
             data={searchResults}
             renderItem={({ item }) => (
               <Pressable onPress={() => sendFriendRequest(item._id)}>
-              <View style={styles.friend}>
+              <View style={styles.friendResult}>
                 <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
                 <Text style={styles.friendName}>{item.username}</Text>
               </View>
@@ -131,8 +131,8 @@ export default function FriendsScreen({ navigation }) {
           data={friends}
           renderItem={({ item }) => (
             <View style={styles.friend}>
-              <Text style={styles.friendName}>{item.username}</Text>
               <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+              <Text style={styles.friendName}>{item.username}</Text>
             </View>
           )}
           keyExtractor={(item) => item._id}
@@ -201,7 +201,17 @@ const styles = StyleSheet.create({
     marginTop: 40,
 
   },
-
+friendResult: {
+  flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginBottom: 20,
+    borderColor: 'grey',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderRadius: 8,
+},
   friend: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
