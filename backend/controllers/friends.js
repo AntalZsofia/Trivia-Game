@@ -34,9 +34,22 @@ const allFriends = async (req, res) => {
 //find user by name
 const findUser = async (req, res) => {
     const { username } = req.query;
+    const authHeader = req.headers.authorization;
+
+    if(!authHeader || !authHeader.startsWith('Bearer ')){
+        return res.status(401).json({ error: 'Invalid token.' });
+    }
+    const token = authHeader.split(' ')[1];
+
 
     try {
-        const users = await User.find({ username: { $regex: username, $options: 'i' } });
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.userId;
+
+        const users = await User.find({ 
+            username: { $regex: username, $options: 'i' },
+            _id: { $ne: userId }
+        });
     
     if(!users || users.length === 0){
         return res.status(404).json({ error: 'No users found.' });
@@ -110,6 +123,9 @@ const sendRequest = async (req, res) => {
         if(!receiver){
             return res.status(404).json({ error: 'User not found.' });
         }
+        if(receiver.Friends.includes(senderId)){
+            return res.status(400).json({ error: 'You are already friends.' });
+        }   
         
         if(receiver.ReceivedFriendRequests.includes(senderId)){
             return res.status(400).json({ error: 'Friend request already sent.' });
