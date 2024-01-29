@@ -10,6 +10,7 @@ import SetUpQuizScreen from './screens/SetUpQuizScreen';
 import FriendsScreen from './screens/FriendsScreen';
 import PendingRequestsScreen from './screens/PendingRequestsScreen';
 import LeaderboardScreen from './screens/LeaderboardScreen';
+import NameTournament from './screens/NameTournament';
 import TournamentsScreen from './screens/TournamentsScreen';
 import QuizScreen from './screens/QuizScreen';
 import ResultScreen from './screens/ResultScreen';
@@ -65,6 +66,7 @@ function SetUpQuizStack() {
       />
       <Stack.Screen name="QuizScreen" component={QuizScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ResultScreen" component={ResultScreen} options={{ headerShown: false }} />
+      <Stack.Screen name= "NameTournament" component={NameTournament} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
