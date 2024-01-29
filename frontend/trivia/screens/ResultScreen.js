@@ -43,6 +43,25 @@ const ResultScreen = ({ route, navigation }) => {
     updatePoints();
     }, []);
 
+    const handleSaveTournament = async () => {
+        try{
+            const response = await fetch('http://localhost:3000/tournament/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ category: questions.category, difficulty: questions.difficulty, totalQuestions: questions.totalQuestions, correctAnswers: questions.correctAnswers, points: questions.points, totalPoints: fullScore }),
+            });
+            const data = await response.json();
+            console.log(data);
+            navigation.navigate('Tournament');
+                }
+                catch(err){
+                    console.log(err);
+                }
+        }
+
     console.log(questions); 
     return (
         <View style={styles.resultContainer}>
@@ -91,7 +110,7 @@ const ResultScreen = ({ route, navigation }) => {
 
                 </View>
 <View style={styles.buttonsContainer}>
-<Pressable style={styles.buttonTournament} onPress={() => navigation.navigate('TournamentsScreen')}>
+<Pressable style={styles.buttonTournament} onPress={handleSaveTournament}>
         <Text style={styles.buttonText}>Make this a tournament</Text>
     </Pressable>
     <Pressable style={styles.buttonBack} onPress={() => navigation.navigate('New Game')}>
