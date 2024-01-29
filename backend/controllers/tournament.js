@@ -46,6 +46,40 @@ const createTournament = async (req, res) => {
 
 }
 
+//update tournament name
+const updateTournamentName = async (req, res) => {
+    const { name, tournamentId } = req.body;
+    const authHeader = req.headers.authorization;
+
+    if(!authHeader || !authHeader.startsWith('Bearer ')){
+        return res.status(401).json({ error: 'Invalid token.' });
+    }
+    const token = authHeader.split(' ')[1];
+
+    try{
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.userId;
+
+        
+
+        const tournament = await Tournament.findById(tournamentId);
+        if(!tournament){
+            return res.status(404).json({ error: 'Tournament not found.' });
+        }
+        if(tournament.users[0].user.toString() !== userId){
+            return res.status(401).json({ error: 'You are not authorized to update this tournament.' });
+        }
+
+        tournament.name = name;
+        await tournament.save();
+        res.status(201).json(tournament);
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while updating tournament name.' });
+    }
+};
+
 //Invite friend to tournament
 const inviteFriend = async (req, res) => {
     const { tournamentId, friendId } = req.body;
@@ -83,4 +117,4 @@ const inviteFriend = async (req, res) => {
 
 }
 
-module.exports = { createTournament, inviteFriend };
+module.exports = { createTournament, updateTournamentName, inviteFriend };
