@@ -10,9 +10,10 @@ import { AuthContext } from '../context/AuthContext';
 
 
 const ResultScreen = ({ route, navigation }) => {
-    const questions = route.params;
+    const { totalQuestions, correctAnswers, category, difficulty, questions, points } = route.params;
+    
     const [fullScore, setFullScore] = useState(0);
-    const { token } = useContext(AuthContext);
+    const { token, userId } = useContext(AuthContext);
 
     useEffect(() => {
          const updatePoints = async () => {
@@ -26,8 +27,8 @@ const ResultScreen = ({ route, navigation }) => {
         const data = await response.json();
         const totalUserPoints = data.totalPoints;
         console.log(data);
-        console.log(questions.points);
-        const newTotalPoints = totalUserPoints + questions.points;
+        
+        const newTotalPoints = totalUserPoints + points;
         setFullScore(newTotalPoints);
         const updateResponse = await fetch('http://localhost:3000/user/update', {
             method: 'PUT',
@@ -44,7 +45,7 @@ const ResultScreen = ({ route, navigation }) => {
     }, []);
 
     const handleSaveTournament = async () => {
-        
+        console.log(questions);
         try{
             const response = await fetch('http://localhost:3000/tournament/create', {
                 method: 'POST',
@@ -53,19 +54,26 @@ const ResultScreen = ({ route, navigation }) => {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ 
-                    category: questions.category, 
-                    difficulty: questions.difficulty, 
-                    questions: questions.questions,
+                    category: category,
+                    difficulty: difficulty,
+                    totalQuestions: totalQuestions,
+                    questions: questions.map(question => ({
+                        category: question.category,
+                        difficulty: question.difficulty,
+                        question: question.question,
+                        correctAnswer: question.correct_answer,
+                        incorrectAnswers: question.incorrectAnswers,
+                    })),
                     users: [{
-                        user: user._id,
-                        score: score
+                        user: userId,
+                        score: points,
                     }] 
                     
                  }),
             });
             const data = await response.json();
             console.log(data);
-            navigation.navigate('Name tournament', { tournamentId: data._id });
+            navigation.navigate('NameTournament', { tournamentId: data._id });
                 }
                 catch(err){
                     console.log(err);
@@ -77,8 +85,8 @@ const ResultScreen = ({ route, navigation }) => {
         <View style={styles.resultContainer}>
             <View style={styles.quizContainer}>
                 <Text style={styles.quizDetails}>You have completed the quiz:</Text>
-                <Text style={styles.quizDetailsCategory}>{questions.category}</Text>
-                <Text style={styles.quizDetailsDifficulty}>{questions.difficulty}</Text>
+                <Text style={styles.quizDetailsCategory}>{category}</Text>
+                <Text style={styles.quizDetailsDifficulty}>{difficulty}</Text>
             </View>
 
             <View style={styles.resultsTitleContainer}>
@@ -89,7 +97,7 @@ const ResultScreen = ({ route, navigation }) => {
                 <View style={styles.resultDetailsContainer}>
                     <View style={styles.imageAndTextContainer}>
                     <Image source={Questions} style={{ width: 30, height: 30, marginLeft: 10 }} />
-                    <Text style={styles.result}>{questions.totalQuestions}</Text>
+                    <Text style={styles.result}>{totalQuestions}</Text>
                     </View>
                     <Text style={styles.resultLabel}>Total Questions</Text>
                 </View>
@@ -97,7 +105,7 @@ const ResultScreen = ({ route, navigation }) => {
                 <View style={styles.resultDetailsContainer}>
                     <View style={styles.imageAndTextContainer}>
                     <Image source={CorrectAnswers} style={{ width: 30, height: 30, marginLeft: 10 }} />
-                    <Text style={styles.result}>{questions.correctAnswers}</Text>
+                    <Text style={styles.result}>{correctAnswers}</Text>
                     </View>
                     <Text style={styles.resultLabel}>Correct Answers</Text>
                 </View>
@@ -105,7 +113,7 @@ const ResultScreen = ({ route, navigation }) => {
                 <View style={styles.resultDetailsContainer}>
                     <View style={styles.imageAndTextContainer}>
                     <Image source={Points} style={{ width: 30, height: 30, marginLeft: 10 }} />
-                    <Text style={styles.result}>{questions.points}</Text>
+                    <Text style={styles.result}>{points}</Text>
                     </View>
                     <Text style={styles.resultLabel}>Points gained</Text>
                 </View>

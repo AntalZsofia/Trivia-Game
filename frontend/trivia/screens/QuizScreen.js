@@ -17,6 +17,7 @@ const QuizScreen = ({ navigation, route }) => {
 
 
     useEffect(() => {
+        console.log(questions);
         if (questions[currentQuestionIndex]) {
             const allAnswers = [
                 questions[currentQuestionIndex].correct_answer,
@@ -41,6 +42,13 @@ const QuizScreen = ({ navigation, route }) => {
                 correctAnswers: correctAnswers, 
                 category: questions[currentQuestionIndex].category, 
                 difficulty: questions[currentQuestionIndex].difficulty,
+                questions: questions.map(question => ({
+                    category: question.category,
+                    difficulty: question.difficulty,
+                    question: question.question,
+                    correctAnswer: question.correct_answer,
+                    incorrectAnswers: question.incorrect_answers,
+                })),
                 points: points, 
             });
         }
