@@ -5,6 +5,7 @@ const details = async (req, res) => {
     try{
         const user = await User.findById(req.user._id);
         res.json(user);
+        console.log(user);
     }catch(err){
         res.status(400).json({error: err.message});
     }
