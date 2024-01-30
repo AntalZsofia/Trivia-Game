@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 const NameTournament = ({ route, navigation }) => {
     const [name, setName] = useState('');
@@ -24,8 +25,8 @@ const NameTournament = ({ route, navigation }) => {
         }
 
         return (
-            <View>
-                <TextInput
+            <View style={styles.container}>
+                <TextInput style={styles.input}
                     value={name}
                     onChangeText={setName}
                     placeholder="Enter tournament name"
@@ -35,5 +36,18 @@ const NameTournament = ({ route, navigation }) => {
         );
     };
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+    },
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+    },
+});
 
     export default NameTournament;
