@@ -4,6 +4,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const triviaRoutes = require('./routes/trivia');
 const friendsRoutes = require('./routes/friends');
+const tournamentRoutes = require('./routes/tournament');
 
 const cors = require('cors');
 const app = express();
@@ -31,6 +32,8 @@ app.use('/trivia', triviaRoutes);
 //Define friends routes
 app.use('/friends', friendsRoutes);
 
+//Define tournament routes
+app.use('/tournament', tournamentRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

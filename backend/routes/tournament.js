@@ -7,3 +7,5 @@ const { createTournament, updateTournamentName, inviteFriend } = require('../con
 router.post('/create', createTournament);
 router.put('/update', updateTournamentName);
 router.put('/invite', inviteFriend);
+
+module.exports = router;

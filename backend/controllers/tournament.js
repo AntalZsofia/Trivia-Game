@@ -8,7 +8,7 @@ const Question = require('../models/Question');
 
 //create tournament
 const createTournament = async (req, res) => {
-    const { name, category, difficulty, type, questions } = req.body;
+    const { name, category, difficulty, totalQuestions, questions, users } = req.body;
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -24,14 +24,16 @@ const createTournament = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found.' });
         }
+        const userScore = users.find(u => u.user.toString() === userId).score;
         const tournament = await Tournament.create({
             name,
             category,
             difficulty,
+            totalQuestions,
             questions,
             users: [{
                 user: user._id,
-                score: 0
+                score: userScore
             }]
         });
 
