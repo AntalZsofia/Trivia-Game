@@ -55,6 +55,7 @@ const LoginScreen = ({ navigation, dispatch }) => {
                     placeholder="Username" />
                 <TextInput
                     style={styles.input}
+                    secureTextEntry={true}
                     onChangeText={setPassword}
                     value={password}
                     placeholder="Password" />
