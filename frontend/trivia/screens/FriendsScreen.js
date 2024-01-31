@@ -90,7 +90,12 @@ export default function FriendsScreen({ navigation }) {
         <TextInput
           style={styles.searchUserInput}
           placeholder="Search new friends"
-          onChangeText={text => setSearchInput(text)}
+          onChangeText={(text) => {
+            setSearchInput(text);
+            if(text === ''){
+              setSearchResults([]);
+            }
+          }}
           value={searchInput}
         />
         <Pressable
