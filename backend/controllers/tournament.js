@@ -6,6 +6,63 @@ const Tournament = require('../models/Tournament');
 const Question = require('../models/Question');
 
 
+//get friends tournaments
+const getFriendsTournaments = async (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if(!authHeader || !authHeader.startsWith('Bearer ')){
+        return res.status(401).json({ error: 'Invalid token.' });
+    }
+    const token = authHeader.split(' ')[1];
+
+    try{
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.userId;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        const friendIds = user.Friends.map(f => f.user.toString());
+        const tournaments = await Tournament.find({ users: { $elemMatch: { user: { $in: friendIds } } } });
+    
+        res.status(200).json(tournaments);
+
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({ error: 'An error occurred while fetching tournaments.' });
+    }
+}
+
+//get user's tournaments
+const getUserTournaments = async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if(!authHeader || !authHeader.startsWith('Bearer ')){
+        return res.status(401).json({ error: 'Invalid token.' });
+    }
+    const token = authHeader.split(' ')[1];
+
+    try{
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.userId;
+
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        const tournaments = await Tournament.find({ users: { $elemMatch: { user: userId } } });
+
+        res.status(200).json(tournaments);
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({ error: 'An error occurred while fetching tournaments.' });
+
+    }
+};
+
+
 //create tournament
 const createTournament = async (req, res) => {
     const { name, category, difficulty, totalQuestions, questions, users } = req.body;
@@ -119,4 +176,4 @@ const inviteFriend = async (req, res) => {
 
 }
 
-module.exports = { createTournament, updateTournamentName, inviteFriend };
+module.exports = { getFriendsTournaments, getUserTournaments, createTournament, updateTournamentName, inviteFriend };
