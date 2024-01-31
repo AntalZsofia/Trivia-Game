@@ -66,6 +66,7 @@ const getUserTournaments = async (req, res) => {
 //create tournament
 const createTournament = async (req, res) => {
     const { name, category, difficulty, totalQuestions, questions, users } = req.body;
+    console.log('log out req.body', req.body);
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -94,6 +95,9 @@ const createTournament = async (req, res) => {
             }]
         });
 
+        user.Tournaments.push(tournament._id);
+        await user.save();
+
         await tournament.save();
         console.log(tournament);
         res.status(201).json(tournament);
@@ -119,7 +123,10 @@ const updateTournamentName = async (req, res) => {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken.userId;
 
-        
+        const user = await User.findById(userId).populate('Tournaments');
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
 
         const tournament = await Tournament.findById(tournamentId);
         if(!tournament){
@@ -131,6 +138,14 @@ const updateTournamentName = async (req, res) => {
 
         tournament.name = name;
         await tournament.save();
+
+        let tournamentInUser = user.Tournaments.find(t => t._id.toString() === tournamentId);
+        
+        if(!tournamentInUser){
+            return res.status(404).json({ error: 'Tournament not found.' });
+        }
+        
+        await user.save();
         res.status(201).json(tournament);
     }
     catch(err){
