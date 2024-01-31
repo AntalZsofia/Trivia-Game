@@ -5,7 +5,6 @@ const TournamentSchema = new mongoose.Schema({
     difficulty: String,
     totalQuestions: Number,
     questions: [{
-        correctAnswers: Number,
         category: String,
         difficulty: String,
         points: Number,
