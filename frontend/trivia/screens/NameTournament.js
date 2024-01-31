@@ -19,10 +19,11 @@ const NameTournament = ({ route, navigation }) => {
             });
             const data = await response.json();
             console.log(data);
-            navigation.navigate('InviteFriend', { tournamentId });
+            navigation.navigate('Tournament', { tournamentId });
         } catch (err) {
             console.error(err);
         }
+    };
 
         return (
             <View style={styles.container}>
@@ -31,11 +32,14 @@ const NameTournament = ({ route, navigation }) => {
                     onChangeText={setName}
                     placeholder="Enter tournament name"
                 />
-                <Pressable title="Save" onPress={handleSaveName} />
+                <Pressable style={styles.button} onPress={handleSaveName}>
+                    <Text style={styles.text}>Save</Text> 
+                </Pressable>
+                        
             </View>
         );
     };
-}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -47,7 +51,33 @@ const styles = StyleSheet.create({
         height: 40,
         margin: 12,
         borderWidth: 1,
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: 'white',
+        borderColor: 'black',
+        borderRadius: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+
     },
+    button: {
+        marginTop: 20,
+        paddingTop: 8,
+        paddingBottom: 8,
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderRadius: 8,
+        backgroundColor: '#09BC8A',
+        alignSelf: 'center',
+    },
+    text: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+        margin: 12,
+        textAlign: 'center',
+    }
 });
 
     export default NameTournament;
