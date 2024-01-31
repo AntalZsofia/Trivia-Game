@@ -31,7 +31,7 @@ const NameTournament = ({ route, navigation }) => {
                     onChangeText={setName}
                     placeholder="Enter tournament name"
                 />
-                <Button title="Save" onPress={handleSaveName} />
+                <Pressable title="Save" onPress={handleSaveName} />
             </View>
         );
     };

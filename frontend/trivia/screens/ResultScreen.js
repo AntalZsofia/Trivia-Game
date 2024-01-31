@@ -61,8 +61,8 @@ const ResultScreen = ({ route, navigation }) => {
                         category: question.category,
                         difficulty: question.difficulty,
                         question: question.question,
-                        correctAnswer: question.correct_answer,
-                        incorrectAnswers: question.incorrectAnswers,
+                        correct_answer: question.correct_answer,
+                        incorrect_answers: question.incorrect_answers,
                     })),
                     users: [{
                         user: userId,
