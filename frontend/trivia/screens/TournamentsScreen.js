@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useContext } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, Pressable, Image, ScrollView } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import Play from '../assets/icons/play.png';
 
 
-export default function TournamentsScreen({ route, navigation }) {
+export default function TournamentsScreen({ route }) {
+  const navigation = useNavigation();
   const { token } = useContext(AuthContext);
   const [tournaments, setTournaments] = useState([]);
   
@@ -47,7 +49,12 @@ export default function TournamentsScreen({ route, navigation }) {
           <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
           <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
           <View style={{ flexDirection: 'column', justifyContent: 'space-between',  }}>
-          <Pressable style={styles.button} onPress={() => navigation.navigate('QuizScreen', { questions: tournament.questions })}>
+          <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab', { 
+            screen: 'New Game', 
+            params: {
+              screen: 'QuizScreen',
+              questions: tournament.questions }
+            })}>
           
             <Image source={Play} style={{ width: 40, height: 40 }} />
             <Text style={styles.buttonText}>Play</Text>
@@ -102,7 +109,6 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     borderRadius: 5,
-    marginTop: 10,
     alignItems: 'end'
   },
   buttonText: {
