@@ -4,6 +4,10 @@ const TournamentSchema = new mongoose.Schema({
     category: String,
     difficulty: String,
     totalQuestions: Number,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
     questions: [{
         category: String,
         difficulty: String,
