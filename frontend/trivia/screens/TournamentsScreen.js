@@ -40,6 +40,14 @@ export default function TournamentsScreen({ route }) {
   const colors = ['#66FFDA', '#C5FF66', '#FFF066'];
   const getBackgroundColor = (index) => colors[index % colors.length];
 
+  const handleNavigateNewGame = (tournament) => {
+    navigation.navigate('MainTab', {
+    screen: 'New Game',
+    params:  { tournament: tournament }
+  });
+  }
+
+
   return (
     <ScrollView style={styles.container}>
       {tournaments.map((tournament, index) => (
@@ -49,12 +57,7 @@ export default function TournamentsScreen({ route }) {
           <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
           <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
           <View style={{ flexDirection: 'column', justifyContent: 'space-between',  }}>
-          <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab', { 
-            screen: 'New Game', 
-            params: {
-              screen: 'QuizScreen',
-              questions: tournament.questions }
-            })}>
+          <Pressable style={styles.button} onPress={() => handleNavigateNewGame(tournament)}>
           
             <Image source={Play} style={{ width: 40, height: 40 }} />
             <Text style={styles.buttonText}>Play</Text>
@@ -114,6 +117,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     fontSize: 16,
-    alignSelf: 'end',
+    fontWeight: 'bold',
   }
 });
