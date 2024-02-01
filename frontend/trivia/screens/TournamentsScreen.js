@@ -26,7 +26,8 @@ export default function TournamentsScreen({ route }) {
         if (response.ok) {
           console.log('Tournaments fetched successfully', data);
           console.log(data);
-          setTournaments(data);
+          const sortedTournaments = data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));  
+          setTournaments(sortedTournaments);
         } else {
           console.log('Fetching tournaments failed', data.error);
         }
@@ -42,7 +43,7 @@ export default function TournamentsScreen({ route }) {
 
   const handleNavigateNewGame = (tournament) => {
     navigation.navigate('MainTab', {
-    screen: 'New Game',
+    screen: 'QuizScreen',
     params:  { tournament: tournament }
   });
   }
