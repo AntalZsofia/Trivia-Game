@@ -73,6 +73,8 @@ export default function PendingRequestsScreen({ navigation }) {
             console.log('Friend request accepted successfully');
             fetchSentRequests();
             fetchReceivedRequests();
+            setReceivedRequests(receivedRequests.filter(request => request._id !== id));
+  
         }
         else{
             const data = await response.json();
