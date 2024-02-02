@@ -23,8 +23,8 @@ const getFriendsTournaments = async (req, res) => {
         if(!user){
             return res.status(404).json({ error: 'User not found.' });
         }
-        const friendIds = user.Friends.map(f => f.user.toString());
-        const tournaments = await Tournament.find({ users: { $elemMatch: { user: { $in: friendIds } } } });
+        const friendIds = user.Friends.map(f => f.toString());
+        const tournaments = await Tournament.find({ users: { $elemMatch: { user: { $in: friendIds } } } }).populate('users');
     
         res.status(200).json(tournaments);
 
