@@ -10,10 +10,12 @@ import { AuthContext } from '../context/AuthContext';
 
 
 const ResultScreen = ({ route, navigation }) => {
-    const { totalQuestions, correctAnswers, category, difficulty, questions, points } = route.params;
+    const { totalQuestions, correctAnswers, category, creator, difficulty, questions, points } = route.params;
     
     const [fullScore, setFullScore] = useState(0);
-    const { token, userId } = useContext(AuthContext);
+    const { token, userId, loggedInUser } = useContext(AuthContext);
+    console.log(loggedInUser);
+    
 
     useEffect(() => {
          const updatePoints = async () => {
@@ -55,6 +57,7 @@ const ResultScreen = ({ route, navigation }) => {
                 },
                 body: JSON.stringify({ 
                     category: category,
+                    creator: loggedInUser,
                     difficulty: difficulty,
                     totalQuestions: totalQuestions,
                     questions: questions.map(question => ({

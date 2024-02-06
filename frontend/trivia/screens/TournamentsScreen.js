@@ -8,7 +8,7 @@ import Play from '../assets/icons/play.png';
 
 export default function TournamentsScreen({ route }) {
   const navigation = useNavigation();
-  const { token } = useContext(AuthContext);
+  const { token, } = useContext(AuthContext);
   const [tournaments, setTournaments] = useState([]);
   const [showMyTournaments, setShowMyTournaments] = useState(true);
   
@@ -46,13 +46,7 @@ export default function TournamentsScreen({ route }) {
       const data = await response.json();
       if (response.ok) {
         console.log('Tournaments fetched successfully', data);
-        const tournamentsWithCreatorDetails = await Promise.all(data.map(async (tournament) => {
-          console.log('Tournament users:', tournament.users);
-          const creator = await fetchUserDetails(tournament.users[0]._id);
-          console.log('Creator:', creator);
-          return { ...tournament, creator };
-        }));
-        setTournaments(tournamentsWithCreatorDetails);
+        setTournaments(data);
       } else {
         console.log('Fetching tournaments failed', data.error);
       }
@@ -65,7 +59,7 @@ export default function TournamentsScreen({ route }) {
   useEffect(() => {
     const url = showMyTournaments ? 'http://localhost:3000/tournament/user' : 'http://localhost:3000/tournament/friends';
     fetchTournaments(url);
-
+    
     const unsubscribe = navigation.addListener('focus', () => fetchTournaments(url));
   return unsubscribe;
   }, [showMyTournaments, navigation]);
@@ -97,7 +91,7 @@ export default function TournamentsScreen({ route }) {
 
       {tournaments.map((tournament, index) => (
         <View key={tournament._id} style={[styles.tournamentContainer, {backgroundColor: getBackgroundColor(index)}]}>
-          <Text style={styles.tournamentName}>{tournament.name} by {tournament.users[0]}</Text>
+          <Text style={styles.tournamentName}>{tournament.name} by {tournament.creator}</Text>
           <Text style={styles.tournamentCategory}>Category: {tournament.category}</Text>
           <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
           <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
