@@ -231,10 +231,11 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
  
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, token, setToken, userId, setUserId }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, token, setToken, userId, setUserId, loggedInUser, setLoggedInUser}}>
       <NavigationContainer>
         {isLoggedIn ? <MainTab /> : <AuthStack />}
       </NavigationContainer>
