@@ -65,7 +65,7 @@ const getUserTournaments = async (req, res) => {
 
 //create tournament
 const createTournament = async (req, res) => {
-    const { name, category, difficulty, totalQuestions, questions, users } = req.body;
+    const { name, creator, category, difficulty, totalQuestions, questions, users } = req.body;
     console.log('log out req.body', req.body);
     const authHeader = req.headers.authorization;
 
@@ -85,6 +85,7 @@ const createTournament = async (req, res) => {
         const userScore = users.find(u => u.user.toString() === userId).score;
         const tournament = await Tournament.create({
             name,
+            creator,
             category,
             difficulty,
             totalQuestions,

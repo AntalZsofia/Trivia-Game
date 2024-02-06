@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const TournamentSchema = new mongoose.Schema({
     name: String,
+    creator: String,
     category: String,
     difficulty: String,
     totalQuestions: Number,
