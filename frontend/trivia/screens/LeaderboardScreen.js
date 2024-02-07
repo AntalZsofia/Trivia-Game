@@ -5,61 +5,87 @@ import { Image } from 'react-native';
 import Trophy from '../assets/icons/trophy.png';
 
 export default function LeaderboardScreen() {
-const [friends, setFriends] = useState([]);
-const { token } = useContext(AuthContext);
+  const [friends, setFriends] = useState([]);
+  const [user, setUser] = useState({});
+  const { token } = useContext(AuthContext);
 
-useEffect(() => {
-  fetchFriends();
-}, []);
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
 
-const fetchFriends = async () => {
-  try{
+  const fetchUserDetails = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/user/details', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      if (!response.ok) {
+        console.error('Failed to fetch user details:', await response.text());
+        return;
+      }
+      const data = await response.json();
+      console.log(data);
+      setUser(data);
+      fetchFriends(data);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
+
+const fetchFriends = async (user) => {
+  try {
     const response = await fetch('http://localhost:3000/friends/all', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
-        },
-        });
-        if(!response.ok){
-          console.error('Failed to fetch friends:', await response.text());
-          return;
-        }
-        const data = await response.json();
-        console.log(data);
-        data.sort((a, b) => b.totalPoints - a.totalPoints);
+      },
+    });
+    if (!response.ok) {
+      console.error('Failed to fetch friends:', await response.text());
+      return;
+    }
+    const data = await response.json();
+    console.log(data);
+    data.push(user);
+    data.sort((a, b) => b.totalPoints - a.totalPoints);
 
-        setFriends(data);
-      } catch (err) {
-        console.error(err);
-      }
-  };
-  const renderItem = ({ item, index }) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{item.username}</Text>
+    setFriends(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+const renderItem = ({ item, index }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{item.username}</Text>
 
-      <View style={styles.scoreContainer}>
+    <View style={styles.scoreContainer}>
       <Text style={styles.score}>{item.totalPoints}</Text>
-      </View>
+    </View>
 
-      <View style={styles.trophyContainer}>
+    <View style={styles.trophyContainer}>
       {index === 0 ?
-       <Image source={Trophy} style={{ width: 50, height: 50 }} />
-       : <View style={{ width: 50, height: 50 }} ></View>}
-      </View>
+        <Image source={Trophy} style={{ width: 50, height: 50 }} />
+        : <View style={{ width: 50, height: 50 }} ></View>}
     </View>
-  );
-  
-  return (
-    <View style={styles.container}>
-      <FlatList
-        style={styles.flatList}
-        data={friends}
-        renderItem={renderItem}
-        keyExtractor={item => item._id}
-      />
-    </View>
-  );
+  </View>
+);
+
+return (
+  <View style={styles.container}>
+    <FlatList
+      style={styles.flatList}
+      data={friends}
+      renderItem={renderItem}
+      keyExtractor={item => item._id}
+    />
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
@@ -94,11 +120,11 @@ const styles = StyleSheet.create({
   },
   score: {
     fontSize: 26,
-    
+
   },
   trophyContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   }
-  });
+});
