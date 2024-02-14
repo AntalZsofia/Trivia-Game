@@ -23,6 +23,7 @@ import { AuthContext } from './context/AuthContext';
 import { Image } from 'react-native';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
+import InviteFriendToTournament from './screens/InviteFriendToTournament';
 
 
 
@@ -128,6 +129,57 @@ function FriendsStack() {
     </Stack.Navigator>
   )
 }
+function TournamentStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Tournament" component={TournamentsScreen} 
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }} 
+      />
+      <Stack.Screen name="Invite Friend" component={InviteFriendToTournament}
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}
+        }
+      />
+    </Stack.Navigator>
+  );
+}
+
 function getTabBarVisibility(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
 
@@ -222,27 +274,8 @@ function MainTab() {
           elevation: 5,
         }
       }} />
-      <Tab.Screen name="Tournament" component={TournamentsScreen} 
-      options={{
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 25,
-          color: 'black',
-          marginTop: 10,
-        },
-        headerStyle: {
-          height: 80,
-          backgroundColor: '#fff',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }
-      }} />
+      <Tab.Screen name="Tournament" component={TournamentStack} options={() => ({ headerShown: false })}    />
+      
     </Tab.Navigator>
   );
 
