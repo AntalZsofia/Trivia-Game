@@ -68,8 +68,8 @@ export default function TournamentsScreen({ route }) {
   const getBackgroundColor = (index) => colors[index % colors.length];
 
   const handleNavigateNewGame = (tournament) => {
-    navigation.navigate('MainTab', {
-    screen: 'QuizScreen',
+    navigation.navigate('Invite Friend', {
+    
     params:  { tournament: tournament }
   });
   }
