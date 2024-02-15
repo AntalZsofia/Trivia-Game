@@ -8,33 +8,35 @@ import Play from '../assets/icons/play.png';
 
 export default function TournamentsScreen({ route }) {
   const navigation = useNavigation();
-  const { token, } = useContext(AuthContext);
+  const { token, userId, loggedInUser } = useContext(AuthContext);
   const [tournaments, setTournaments] = useState([]);
+ // const [username, setUsername] = useState('');
   const [showMyTournaments, setShowMyTournaments] = useState(true);
-  
-  const fetchUserDetails = async (userId) => {
-    try {
-      const response = await fetch(`http://localhost:3000/user/${userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else {
-        const user = await response.json();
-        console.log(user);
-        return user;
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
 
-  const fetchTournaments = async (url) => {
+  // const fetchUserDetails = async (userId) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:3000/user/${userId}`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     } else {
+  //       const user = await response.json();
+  //       console.log(user);
+  //       setUsername(user.username);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // }
+
+  const fetchTournaments = async () => {
+    const url = showMyTournaments ? 'http://localhost:3000/tournament/user' : 'http://localhost:3000/tournament/friends';
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -57,51 +59,62 @@ export default function TournamentsScreen({ route }) {
   }
 
   useEffect(() => {
-    const url = showMyTournaments ? 'http://localhost:3000/tournament/user' : 'http://localhost:3000/tournament/friends';
-    fetchTournaments(url);
-    
-    const unsubscribe = navigation.addListener('focus', () => fetchTournaments(url));
-  return unsubscribe;
+   // fetchUserDetails(userId);
+    fetchTournaments();
+
+    const unsubscribe = navigation.addListener('focus', () => fetchTournaments());
+    return unsubscribe;
   }, [showMyTournaments, navigation]);
 
   const colors = ['#66FFDA', '#C5FF66', '#FFF066'];
   const getBackgroundColor = (index) => colors[index % colors.length];
 
-  const handleNavigateNewGame = (tournament) => {
+  const handleInvite = (tournament) => {
     navigation.navigate('Invite Friend', {
-    
-    params:  { tournament: tournament }
-  });
-  }
 
+      params: { tournament: tournament }
+    });
+  }
+  const handleJoin = (tournament) => {
+    navigation.navigate('New Quiz', {
+      params: { tournament: tournament }
+    });
+  }
 
   return (
     <ScrollView style={styles.container}>
 
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.buttonTournament} 
-        onPress={() => setShowMyTournaments(true)}
-        color={showMyTournaments ? 'blue' : 'white'}>
+        <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 3 : 1 }]}
+          onPress={() => setShowMyTournaments(true)}
+        >
           <Text style={styles.buttonText}>Own</Text>
         </Pressable>
-        <Pressable style={styles.buttonTournament} onPress={() => setShowMyTournaments(false)}>
+        <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 1 : 3 }]}
+          onPress={() => setShowMyTournaments(false)}>
           <Text style={styles.buttonText}>Friends</Text>
         </Pressable>
       </View>
 
       {tournaments.map((tournament, index) => (
-        <View key={tournament._id} style={[styles.tournamentContainer, {backgroundColor: getBackgroundColor(index)}]}>
+        <View key={tournament._id} style={[styles.tournamentContainer, { backgroundColor: getBackgroundColor(index) }]}>
           <Text style={styles.tournamentName}>{tournament.name} by {tournament.creator}</Text>
           <Text style={styles.tournamentCategory}>Category: {tournament.category}</Text>
           <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
           <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between',  }}>
-          <Pressable style={styles.button} onPress={() => handleNavigateNewGame(tournament)}>
-          
-            <Image source={Play} style={{ width: 40, height: 40 }} />
-            <Text style={styles.buttonText}>Invite</Text>
-          
-          </Pressable>
+          <View style={{ flexDirection: 'column', justifyContent: 'space-between', }}>
+            {tournament.creator === loggedInUser ? (
+              <Pressable style={styles.button} onPress={() => handleInvite(tournament)}>
+                <Image source={Play} style={{ width: 40, height: 40 }} />
+                <Text style={styles.buttonText}>Invite</Text>
+              </Pressable>
+            )
+              : (
+                <Pressable style={styles.button} onPress={() => handleJoin(tournament)}>
+                  <Image source={Play} style={{ width: 40, height: 40 }} />
+                  <Text style={styles.buttonText}>Join</Text>
+                </Pressable>
+              )}
           </View>
         </View>
       ))}
@@ -109,12 +122,13 @@ export default function TournamentsScreen({ route }) {
 
   )
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
-    
+
   },
   buttonContainer: {
     flexDirection: 'row',

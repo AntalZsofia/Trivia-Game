@@ -5,10 +5,10 @@ import { AuthContext } from '../context/AuthContext';
 const InviteFriendToTournament = ( ) => {
   const [friends, setFriends] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState([]);
-  const { token, } = useContext(AuthContext);
+  const { token, loggedInUser } = useContext(AuthContext);
 
   useEffect(() => {
-    // Fetch user's friends from API
+   
     fetchFriends();
   }, []);
 
@@ -59,14 +59,23 @@ const InviteFriendToTournament = ( ) => {
   };
 
   const handleInvitePress = () => {
-    // Send invitation to selected friends
-    // Replace the API call with your own implementation
-    // Example:
-    fetch('/api/invite', {
+    const username = loggedInUser;
+    const message = `You have been invited to join in a tournament by your friend ${username}`;
+    
+    const recipientUsernames = selectedFriends.map(friendId => {
+    const friend = friends.find(f => f._id === friendId);
+    return friend ? friend.username : null;
+  });
+
+    fetch('http://localhost:3000/message/send', {
       method: 'POST',
-      body: JSON.stringify(selectedFriends),
+      body: JSON.stringify({
+        recipients: recipientUsernames,
+        message: message
+      }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     })
       .then(response => response.json())
@@ -113,7 +122,7 @@ flatListFriends: {
 friend: {
     flex: 1,
     color: 'black',
-    fontSize: 20,
+    fontSize: 30,
 
   },
   tick: {
@@ -124,11 +133,14 @@ friend: {
     padding: 20, 
     alignItems: 'center',
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 40,
+    width: '50%',
+    alignSelf: 'center',
+
   },
   inviteButtonText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 30,
     fontStyle: 'bold',
   }
 
