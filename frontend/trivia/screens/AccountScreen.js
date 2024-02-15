@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Pressable } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 const AccountScreen = ({ navigation, dispatch }) => {
@@ -8,6 +8,7 @@ const AccountScreen = ({ navigation, dispatch }) => {
     const [userDetails, setUserDetails] = useState(null);
     const { token, userId } = useContext(AuthContext);
     const avatars = ['bunny.jpg', 'fox.jpg', 'lion.jpg'];
+    const [messages, setMessages] = useState([]);
 
 
 useFocusEffect(
@@ -37,6 +38,9 @@ useFocusEffect(
         fetchUserDetails();
     }, [token])
 );
+const handleMessages = () => {
+    navigation.navigate('Messages');
+};
 
 
     return (
@@ -72,6 +76,11 @@ useFocusEffect(
                 <Text style={styles.details}>{userDetails?.Friends.length}</Text>
                 </View>
             </View>
+            <View style={styles.messagesContainer}>
+        <Pressable onPress={handleMessages}>
+          <Text style={styles.messagesText}>Notifications</Text>
+        </Pressable>
+      </View>
         </View>
     )
 }
@@ -115,6 +124,16 @@ const styles = StyleSheet.create({
         color: '#000000',
         marginBottom: 10,
     },
+    messagesContainer: {
+        marginHorizontal: 20,
+        marginTop: 20,
+    
+      },
+      messagesText: {
+        color: 'black',
+        fontSize: 20,
+        fontWeight: 'bold',
+      },
 });
 
 export default AccountScreen;
