@@ -6,6 +6,7 @@ const triviaRoutes = require('./routes/trivia');
 const friendsRoutes = require('./routes/friends');
 const tournamentRoutes = require('./routes/tournament');
 const tokenRoutes = require('./routes/token');
+const messageRoutes = require('./routes/message');
 
 const cors = require('cors');
 const app = express();
@@ -26,6 +27,9 @@ app.use('/auth', authRoutes);
 
 // Define user routes
 app.use('/user', userRoutes);
+
+//Define message routes
+app.use('/message', messageRoutes);
 
 //Define trivia routes
 app.use('/trivia', triviaRoutes);
