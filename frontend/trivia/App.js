@@ -22,7 +22,7 @@ import Tournament from './assets/icons/ranking.png'
 import { AuthContext } from './context/AuthContext';
 import { Image } from 'react-native';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
+import MessagesScreen from './screens/MessagesScreen';
 import InviteFriendToTournament from './screens/InviteFriendToTournament';
 
 
@@ -75,7 +75,7 @@ function SetUpQuizStack() {
       />
       <Stack.Screen name="QuizScreen" component={QuizScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ResultScreen" component={ResultScreen} options={{ headerShown: false }} />
-      <Stack.Screen name= "NameTournament" component={NameTournament} options={{ headerShown: false }} />
+      <Stack.Screen name="NameTournament" component={NameTournament} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
@@ -83,7 +83,7 @@ function SetUpQuizStack() {
 function FriendsStack() {
   return (
     <Stack.Navigator>
-       <Stack.Screen name="Friends" component={FriendsScreen} 
+      <Stack.Screen name="Friends" component={FriendsScreen}
         options={{
           headerTitleAlign: 'center',
           headerTitleStyle: {
@@ -103,36 +103,36 @@ function FriendsStack() {
             shadowRadius: 3.84,
             elevation: 5,
           }
-        }} 
+        }}
       />
       <Stack.Screen name="Pending Requests" component={PendingRequestsScreen}
-      options={{
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 25,
-          color: 'black',
-          marginTop: 10,
-        },
-        headerStyle: {
-          height: 80,
-          backgroundColor: '#fff',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
           },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }
-      }}  />
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }} />
     </Stack.Navigator>
   )
 }
 function TournamentStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Tournament" component={TournamentsScreen} 
+      <Stack.Screen name="Tournament" component={TournamentsScreen}
         options={{
           headerTitleAlign: 'center',
           headerTitleStyle: {
@@ -152,7 +152,7 @@ function TournamentStack() {
             shadowRadius: 3.84,
             elevation: 5,
           }
-        }} 
+        }}
       />
       <Stack.Screen name="Invite Friend" component={InviteFriendToTournament}
         options={{
@@ -173,12 +173,85 @@ function TournamentStack() {
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-          }}
+          }
+        }
+        }
+      />
+      <Stack.Screen name="New Quiz" component={QuizScreen}
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }
         }
       />
     </Stack.Navigator>
   );
 }
+function AccountStack() {
+  return (
+    <Stack.Navigator>
+      <Tab.Screen name="Account" component={AccountScreen}
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }} />
+      <Tab.Screen name="Messages" component={MessagesScreen}
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }} />
+    </Stack.Navigator>
+  );
+}
+
 
 function getTabBarVisibility(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
@@ -230,7 +303,10 @@ function MainTab() {
       }}
     >
       {/* <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} /> */}
-      <Tab.Screen name="Account" component={AccountScreen}
+      <Tab.Screen name="Account" component={AccountStack} options={{ headerShown: false }} />
+      <Tab.Screen name="Friends" component={FriendsStack} options={{ headerShown: false }} />
+      <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false }} />
+      <Tab.Screen name="Leaderboard" component={LeaderboardScreen}
         options={{
           headerTitleAlign: 'center',
           headerTitleStyle: {
@@ -251,31 +327,8 @@ function MainTab() {
             elevation: 5,
           }
         }} />
-      <Tab.Screen name="Friends" component={FriendsStack} options={{ headerShown: false }}/>
-      <Tab.Screen name="New Game" component={SetUpQuizStack} options={{ headerShown: false }} />
-      <Tab.Screen name="Leaderboard" component={LeaderboardScreen} 
-      options={{
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 25,
-          color: 'black',
-          marginTop: 10,
-        },
-        headerStyle: {
-          height: 80,
-          backgroundColor: '#fff',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }
-      }} />
-      <Tab.Screen name="Tournament" component={TournamentStack} options={() => ({ headerShown: false })}    />
-      
+      <Tab.Screen name="Tournament" component={TournamentStack} options={() => ({ headerShown: false })} />
+
     </Tab.Navigator>
   );
 
@@ -285,10 +338,10 @@ export default function App() {
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
   const [loggedInUser, setLoggedInUser] = useState(null);
- 
+
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, token, setToken, userId, setUserId, loggedInUser, setLoggedInUser}}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, token, setToken, userId, setUserId, loggedInUser, setLoggedInUser }}>
       <NavigationContainer>
         {isLoggedIn ? <MainTab /> : <AuthStack />}
       </NavigationContainer>
