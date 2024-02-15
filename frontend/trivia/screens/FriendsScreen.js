@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native'; 
+import { useFocusEffect } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, FlatList, Image, StyleSheet, Pressable, TextInput, TouchableOpacity } from 'react-native';
 
 export default function FriendsScreen({ navigation }) {
-  const { token, userId } = useContext(AuthContext);
+  const { token, userId, loggedInUser } = useContext(AuthContext);
   const [friends, setFriends] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -12,30 +12,30 @@ export default function FriendsScreen({ navigation }) {
   console.log(userId);
 
   useFocusEffect(
-  useCallback(() => {
-    const fetchFriends = async () => {
-      try {
+    useCallback(() => {
+      const fetchFriends = async () => {
+        try {
 
-        const response = await fetch(`http://localhost:3000/friends/all`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          console.log('Friends fetched successfully', data);
-          setFriends(data);
-        } else {
-          console.log('Fetching friends failed', data.error);
+          const response = await fetch(`http://localhost:3000/friends/all`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+          });
+          const data = await response.json();
+          if (response.ok) {
+            console.log('Friends fetched successfully', data);
+            setFriends(data);
+          } else {
+            console.log('Fetching friends failed', data.error);
+          }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
       }
-    }
-    fetchFriends();
-  }, [token, userId])
+      fetchFriends();
+    }, [token, userId])
   );
 
   const handlePendingRequests = () => {
@@ -64,7 +64,7 @@ export default function FriendsScreen({ navigation }) {
   };
 
   const sendFriendRequest = async (receiverId) => {
-    
+
     console.log('receiver: ', receiverId);
     console.log('sender: ', userId);
 
@@ -74,77 +74,97 @@ export default function FriendsScreen({ navigation }) {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({senderId: userId, receiverId}),
+      body: JSON.stringify({ senderId: userId, receiverId }),
     });
-    if(!response.ok){
+    if (!response.ok) {
       console.error('Failed to send friend request:', await response.text());
       return;
     }
-    const data = await response.json(); 
+    const data = await response.json();
     console.log('Friend request sent successfully', data);
+
+    const messageResponse = await fetch('http://localhost:3000/messages/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        senderId: userId,
+        receiverId,
+        message: `You have a new friend request frpm ${loggedInUser}!`
+      }),
+    });
+    if (!messageResponse.ok) {
+      console.error('Failed to send message:', await messageResponse.text());
+      return;
+    }
+    const messageData = await messageResponse.json();
+    console.log('Message sent successfully', messageData);
   }
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.searchUserContainer}>
-        <TextInput
-          style={styles.searchUserInput}
-          placeholder="Search new friends"
-          onChangeText={(text) => {
-            setSearchInput(text);
-            if(text === ''){
-              setSearchResults([]);
-            }
-          }}
-          value={searchInput}
-        />
-        <Pressable
-          style={styles.searchUserButton}
-          onPress={handleSearchUser}>
-          <Text style={styles.searchUserButtonText}>Search</Text>
-        </Pressable>
-      </View>
+
+return (
+  <View style={styles.container}>
+    <View style={styles.searchUserContainer}>
+      <TextInput
+        style={styles.searchUserInput}
+        placeholder="Search new friends"
+        onChangeText={(text) => {
+          setSearchInput(text);
+          if (text === '') {
+            setSearchResults([]);
+          }
+        }}
+        value={searchInput}
+      />
+      <Pressable
+        style={styles.searchUserButton}
+        onPress={handleSearchUser}>
+        <Text style={styles.searchUserButtonText}>Search</Text>
+      </Pressable>
+    </View>
 
 
-      {searchResults.length > 0 && (
-        <View style={styles.friendList}>
-          <Text style={styles.resultTitle}>Results</Text>
-          <FlatList
-            data={searchResults}
-            renderItem={({ item }) => (
-              <Pressable onPress={() => sendFriendRequest(item._id)}>
+    {searchResults.length > 0 && (
+      <View style={styles.friendList}>
+        <Text style={styles.resultTitle}>Results</Text>
+        <FlatList
+          data={searchResults}
+          renderItem={({ item }) => (
+            <Pressable onPress={() => sendFriendRequest(item._id)}>
               <View style={styles.friendResult}>
                 <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
                 <Text style={styles.friendName}>{item.username}</Text>
               </View>
-              </Pressable>
-            )}
-            keyExtractor={(item) => item._id}
-          />
-        </View>
-      )}
-
-      <View style={styles.friendRequestsContainer}>
-        <Pressable onPress={handlePendingRequests}>
-          <Text style={styles.friendRequestsButtonText}>Pending requests</Text>
-        </Pressable>
-      </View>
-
-      <View style={styles.friendList}>
-        <Text style={{ fontSize: 20, marginLeft: 20, marginBottom: 10 }}>My friends</Text>
-        <FlatList
-          data={friends}
-          renderItem={({ item }) => (
-            <View style={styles.friend}>
-              <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
-              <Text style={styles.friendName}>{item.username}</Text>
-            </View>
+            </Pressable>
           )}
           keyExtractor={(item) => item._id}
         />
       </View>
+    )}
+
+    <View style={styles.friendRequestsContainer}>
+      <Pressable onPress={handlePendingRequests}>
+        <Text style={styles.friendRequestsButtonText}>Pending requests</Text>
+      </Pressable>
     </View>
-  );
+
+    <View style={styles.friendList}>
+      <Text style={{ fontSize: 20, marginLeft: 20, marginBottom: 10 }}>My friends</Text>
+      <FlatList
+        data={friends}
+        renderItem={({ item }) => (
+          <View style={styles.friend}>
+            <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+            <Text style={styles.friendName}>{item.username}</Text>
+          </View>
+        )}
+        keyExtractor={(item) => item._id}
+      />
+    </View>
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
@@ -206,8 +226,8 @@ const styles = StyleSheet.create({
     marginTop: 40,
 
   },
-friendResult: {
-  flexDirection: 'row',
+  friendResult: {
+    flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginHorizontal: 20,
@@ -216,7 +236,7 @@ friendResult: {
     backgroundColor: 'white',
     borderWidth: 1,
     borderRadius: 8,
-},
+  },
   friend: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -233,6 +253,6 @@ friendResult: {
     fontSize: 20,
     marginLeft: 20,
     textAlign: 'center',
-    fontWeight: 'bold', 
+    fontWeight: 'bold',
   },
 });
