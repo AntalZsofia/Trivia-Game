@@ -24,6 +24,7 @@ import { Image } from 'react-native';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import MessagesScreen from './screens/MessagesScreen';
 import InviteFriendToTournament from './screens/InviteFriendToTournament';
+import QuizFromTournamentScreen from './screens/QuizFromTournamentScreen';
 
 
 
@@ -177,29 +178,7 @@ function TournamentStack() {
         }
         }
       />
-      <Stack.Screen name="New Quiz" component={QuizScreen}
-        options={{
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontSize: 25,
-            color: 'black',
-            marginTop: 10,
-          },
-          headerStyle: {
-            height: 80,
-            backgroundColor: '#fff',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }
-        }
-        }
-      />
+      
     </Stack.Navigator>
   );
 }
@@ -227,7 +206,7 @@ function AccountStack() {
             elevation: 5,
           }
         }} />
-      <Tab.Screen name="Messages" component={MessagesScreen}
+      <Tab.Screen name="Notifications" component={MessagesScreen}
         options={{
           headerTitleAlign: 'center',
           headerTitleStyle: {
@@ -248,6 +227,29 @@ function AccountStack() {
             elevation: 5,
           }
         }} />
+        <Stack.Screen name="New Quiz" component={QuizFromTournamentScreen}
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }
+        }
+      />
     </Stack.Navigator>
   );
 }
