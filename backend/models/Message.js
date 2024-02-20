@@ -10,6 +10,10 @@ const MessageSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    TournamentId: {
+        type: String
+
     }
 });
 module.exports = mongoose.model('Message', MessageSchema);
