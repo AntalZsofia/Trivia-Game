@@ -13,27 +13,7 @@ export default function TournamentsScreen({ route }) {
  // const [username, setUsername] = useState('');
   const [showMyTournaments, setShowMyTournaments] = useState(true);
 
-  // const fetchUserDetails = async (userId) => {
-  //   try {
-  //     const response = await fetch(`http://localhost:3000/user/${userId}`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': `Bearer ${token}`
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     } else {
-  //       const user = await response.json();
-  //       console.log(user);
-  //       setUsername(user.username);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // }
+ 
 
   const fetchTournaments = async () => {
     const url = showMyTournaments ? 'http://localhost:3000/tournament/user' : 'http://localhost:3000/tournament/friends';
@@ -59,7 +39,7 @@ export default function TournamentsScreen({ route }) {
   }
 
   useEffect(() => {
-   // fetchUserDetails(userId);
+   console.log(tournaments)
     fetchTournaments();
 
     const unsubscribe = navigation.addListener('focus', () => fetchTournaments());
@@ -70,16 +50,14 @@ export default function TournamentsScreen({ route }) {
   const getBackgroundColor = (index) => colors[index % colors.length];
 
   const handleInvite = (tournament) => {
-    navigation.navigate('Invite Friend', {
+    navigation.navigate('Invite Friend', { tournament: tournament });
+  }
 
-      params: { tournament: tournament }
-    });
-  }
   const handleJoin = (tournament) => {
-    navigation.navigate('New Quiz', {
-      params: { tournament: tournament }
-    });
-  }
+    navigation.navigate('New Quiz', tournament) };
+    
+  
+  
 
   return (
     <ScrollView style={styles.container}>

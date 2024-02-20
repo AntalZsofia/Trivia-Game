@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 
-const InviteFriendToTournament = ( ) => {
+const InviteFriendToTournament = ( { route }) => {
+  const tournament = route.params.tournament;
+  console.log(tournament);
   const [friends, setFriends] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const { token, loggedInUser } = useContext(AuthContext);
@@ -60,6 +62,8 @@ const InviteFriendToTournament = ( ) => {
 
   const handleInvitePress = () => {
     const username = loggedInUser;
+    const tournamentId = tournament._id;
+    console.log(tournamentId);
     const message = `You have been invited to join in a tournament by your friend ${username}`;
     
     const recipientUsernames = selectedFriends.map(friendId => {
@@ -71,7 +75,8 @@ const InviteFriendToTournament = ( ) => {
       method: 'POST',
       body: JSON.stringify({
         recipients: recipientUsernames,
-        message: message
+        message: message,
+        tournamentId: tournamentId
       }),
       headers: {
         'Content-Type': 'application/json',
