@@ -56,9 +56,7 @@ export default function MessagesScreen({ navigation }) {
             console.error(err);
         }
     }
-
-
-
+ 
     return (
         <View style={styles.container}>
             <FlatList
@@ -67,7 +65,12 @@ export default function MessagesScreen({ navigation }) {
                 renderItem={({ item }) => (
                     <View style={styles.messageContainer}>
                         <View style={styles.innerContainer}>
-                            <Text style={styles.message}>{item.Message}</Text>
+                            <Text style={styles.message}
+                             onPress={() => {
+                                const tournamentId = item.TournamentId;
+                                navigation.navigate('New Quiz', { tournamentId: tournamentId }); 
+                              }}>
+                                {item.Message}</Text>
                             <Pressable style={styles.deleteButton} onPress={() => deleteMessage(item._id)}>
                                 <Image source={Decline} style={{ width: 40, height: 40 }} />
                             </Pressable>
