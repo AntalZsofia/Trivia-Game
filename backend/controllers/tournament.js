@@ -190,6 +190,41 @@ const inviteFriend = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while inviting friend.' });
     }
 
+};
+
+//get tournament by id
+const getTournamentById = async (req, res) => {
+    const { tournamentId } = req.params;
+    console.log(tournamentId);
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Invalid token.' });
+    }
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.userId;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        const tournament = await Tournament.findById(tournamentId);
+        if (!tournament) {
+            return res.status(404).json({ error: 'Tournament not found.' });
+        }
+        res.status(200).json(tournament);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching tournament.' });
+    }
 }
 
-module.exports = { getFriendsTournaments, getUserTournaments, createTournament, updateTournamentName, inviteFriend };
+module.exports = { getFriendsTournaments, 
+    getUserTournaments, 
+    createTournament,
+    updateTournamentName, 
+    inviteFriend, 
+    getTournamentById };
