@@ -39,7 +39,7 @@ useFocusEffect(
     }, [token])
 );
 const handleMessages = () => {
-    navigation.navigate('Messages');
+    navigation.navigate('Notifications');
 };
 
 
@@ -67,10 +67,7 @@ const handleMessages = () => {
                 <Text style={styles.details}>Games played:</Text>
                 <Text style={styles.details}>{userDetails?.gamesPlayed}</Text>
                 </View>
-                <View style={styles.detailContainer}>
-                <Text style={styles.details}>Tournaments:</Text>
-                <Text style={styles.details}>{userDetails?.Tournaments.length}</Text>
-                </View>
+            
                 <View style={styles.detailContainer}>
                 <Text style={styles.details}>Friends:</Text>
                 <Text style={styles.details}>{userDetails?.Friends.length}</Text>
@@ -102,7 +99,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     userContainer: {
-        height: 500,
         width: '80%',
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -127,6 +123,7 @@ const styles = StyleSheet.create({
     messagesContainer: {
         marginHorizontal: 20,
         marginTop: 20,
+       padding: 5,
     
       },
       messagesText: {
