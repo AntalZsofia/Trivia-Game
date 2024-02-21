@@ -64,7 +64,10 @@ const InviteFriendToTournament = ( { route }) => {
     const username = loggedInUser;
     const tournamentId = tournament._id;
     console.log(tournamentId);
-    const message = `You have been invited to join in a tournament by your friend ${username}`;
+    const message = `You have a new invitation to join a tournament in:
+     category: ${tournament.category}
+     difficulty: ${tournament.difficulty} 
+     by ${username}`;
     
     const recipientUsernames = selectedFriends.map(friendId => {
     const friend = friends.find(f => f._id === friendId);

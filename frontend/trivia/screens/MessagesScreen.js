@@ -97,14 +97,15 @@ const styles = StyleSheet.create({
         
     },
     innerContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
     },
     message: {
-        fontSize: 25,
+        fontSize: 22,
         marginLeft: 10,
         color: 'black',
+        
     },
     deleteButton: {
         padding: 10,
