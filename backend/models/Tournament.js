@@ -18,6 +18,7 @@ const TournamentSchema = new mongoose.Schema({
         incorrect_answers: [String]
     }],
     users: [{
+        username: String,
         user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

@@ -91,6 +91,7 @@ const createTournament = async (req, res) => {
             totalQuestions,
             questions,
             users: [{
+                username: user.username,
                 user: user._id,
                 score: userScore
             }]
@@ -245,7 +246,7 @@ const updateTournamentParticipants = async (req, res) => {
         if (!tournament) {
             return res.status(404).json({ error: 'Tournament not found.' });
         }
-        tournament.users.push({ user: participantId, score: points });
+        tournament.users.push({ username: user.username, user: participantId, score: points });
         await tournament.save();
         res.status(201).json(tournament);
 
