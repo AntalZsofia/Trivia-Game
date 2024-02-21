@@ -25,7 +25,8 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import MessagesScreen from './screens/MessagesScreen';
 import InviteFriendToTournament from './screens/InviteFriendToTournament';
 import QuizFromTournamentScreen from './screens/QuizFromTournamentScreen';
-
+import ResultAfterTournament from './screens/ResultAfterTournament';
+import AllResultsAfterTournament from './screens/AllResultsAfterTournament';
 
 
 
@@ -250,6 +251,10 @@ function AccountStack() {
         }
         }
       />
+      <Stack.Screen name="ResultAfterTournament" component={ResultAfterTournament} 
+      options={{ headerShown: false }} />
+      <Stack.Screen name="All Results" component={AllResultsAfterTournament}
+      options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
