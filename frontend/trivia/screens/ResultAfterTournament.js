@@ -55,29 +55,9 @@ const ResultAfterTournament = ({ route, navigation }) => {
     updateAndSaveResults();
     }, []);
 
-    const handleGetAllResults = async (id) => {
-    try{
-        const response = await fetch(`http://localhost:3000/tournament/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        });
-        const data = await response.json();
-        if (response.ok) {
-            console.log('Tournament fetched successfully', data);
-            setParticipants(data.users.user);
-            setParticipantsPoints(data.users.score);
-        } else {
-            console.log('Fetching tournament failed', data.error);
-        }
-
+    const handleGetAllResults = async () => {
+    return navigation.navigate('All Results',  { tournamentId });
     }
-    catch (err) {
-        console.error(err);
-    }
-        }
 
     const saveUserResults = async (tournamentId, userId, points) => {
         try {
