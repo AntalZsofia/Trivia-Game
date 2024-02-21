@@ -27,8 +27,8 @@ export default function AllResultsAfterTournament( { route } ) {
             const data = await response.json();
             if (response.ok) {
                 console.log('Tournament fetched successfully', data);
-                setParticipants(data.users.user);
-                setParticipantsPoints(data.users.score);
+                const sortedParticipants = data.users.sort((a, b) => b.score - a.score);    
+                setParticipants(sortedParticipants);
             } else {
                 console.log('Fetching tournament failed', data.error);
             }
@@ -45,7 +45,7 @@ export default function AllResultsAfterTournament( { route } ) {
             <Text style={styles.title}>{item.username}</Text>
 
             <View style={styles.scoreContainer}>
-                <Text style={styles.score}>{item.totalPoints}</Text>
+                <Text style={styles.score}>{item.score}</Text>
             </View>
 
             <View style={styles.trophyContainer}>
@@ -60,7 +60,7 @@ export default function AllResultsAfterTournament( { route } ) {
         <View style={styles.container}>
             <FlatList
                 style={styles.flatList}
-                data={friends}
+                data={participants}
                 renderItem={renderItem}
                 keyExtractor={item => item._id}
             />

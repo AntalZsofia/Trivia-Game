@@ -254,7 +254,27 @@ function AccountStack() {
       <Stack.Screen name="ResultAfterTournament" component={ResultAfterTournament} 
       options={{ headerShown: false }} />
       <Stack.Screen name="All Results" component={AllResultsAfterTournament}
-      options={{ headerShown: false }} />
+      options={{
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontSize: 25,
+          color: 'black',
+          marginTop: 10,
+        },
+        headerStyle: {
+          height: 80,
+          backgroundColor: '#fff',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }
+      }
+      } />
     </Stack.Navigator>
   );
 }
