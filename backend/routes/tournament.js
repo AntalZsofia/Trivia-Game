@@ -8,7 +8,8 @@ const { getFriendsTournaments,
         updateTournamentName, 
         inviteFriend,
         getTournamentById,
-        updateTournamentParticipants } = require('../controllers/tournament');
+        updateTournamentParticipants,
+        deleteTournament } = require('../controllers/tournament');
 
 router.get('/friends', getFriendsTournaments);
 router.get('/user', getUserTournaments);
@@ -17,6 +18,7 @@ router.put('/update', updateTournamentName);
 router.put('/invite', inviteFriend);
 router.get('/:tournamentId', getTournamentById);
 router.put('/:tournamentId', updateTournamentParticipants);
+router.delete('/delete/:tournamentId', deleteTournament);
 
 
 module.exports = router;

@@ -257,10 +257,45 @@ const updateTournamentParticipants = async (req, res) => {
     }
 }
 
+//delete tournament
+const deleteTournament = async (req, res) => {
+    const { tournamentId } = req.params;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Invalid token.' });
+    }
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decodedToken.userId;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        const tournament = await Tournament.findById(tournamentId);
+        if (!tournament) {
+            return res.status(404).json({ error: 'Tournament not found.' });
+        }
+        if (tournament.creator !== user.username) {
+            return res.status(401).json({ error: 'You are not authorized to delete this tournament.' });
+        }
+        await tournament.deleteOne({ _id: tournamentId });
+        res.status(204).end();
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while deleting tournament.' });
+    }
+}
+
 module.exports = { getFriendsTournaments, 
     getUserTournaments, 
     createTournament,
     updateTournamentName, 
     inviteFriend, 
     getTournamentById,
-    updateTournamentParticipants };
+    updateTournamentParticipants,
+    deleteTournament };

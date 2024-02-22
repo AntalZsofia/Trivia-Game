@@ -5,6 +5,7 @@ import { View, Text, StyleSheet, Pressable, Image, ScrollView } from 'react-nati
 import { AuthContext } from '../context/AuthContext';
 import Play from '../assets/icons/play.png';
 import Results from '../assets/icons/exam.png';
+import Delete from '../assets/icons/garbage.png';
 
 
 export default function TournamentsScreen({ route }) {
@@ -62,6 +63,28 @@ export default function TournamentsScreen({ route }) {
     navigation.navigate('All Results', { tournamentId: tournamentId });
   }
 
+  const handleDelete = async (tournamentId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/tournament/delete/${tournamentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        console.log('Tournament deleted successfully');
+        fetchTournaments();
+      } else {
+        const data = await response.json();
+        console.log('Deleting tournament failed', data.error);
+      }
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
     return (
       <ScrollView style={styles.container}>
 
@@ -85,10 +108,17 @@ export default function TournamentsScreen({ route }) {
             <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
             <View style={{ flexDirection: 'column', justifyContent: 'space-between', }}>
               {tournament.creator === loggedInUser ? (
+                <View style={styles.buttonContainer}>
+                <Pressable style={styles.button} onPress={() => handleDelete(tournament._id)}>
+                <Image source={Delete} style={{ width: 40, height: 40 }} />
+                <Text style={styles.buttonText}>Delete</Text>
+
+              </Pressable>
                 <Pressable style={styles.button} onPress={() => handleInvite(tournament)}>
                   <Image source={Play} style={{ width: 40, height: 40 }} />
                   <Text style={styles.buttonText}>Invite</Text>
                 </Pressable>
+                </View>
               )
                 : (
                   tournament.users.map(user => user.username).includes(loggedInUser) ? (
