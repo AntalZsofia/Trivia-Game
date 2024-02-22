@@ -80,7 +80,8 @@ const sendMessage = async (req, res) => {
 //delete message
 const deleteMessage = async (req, res) => {
     const authHeader = req.headers.authorization;
-    const { messageId } = req.body;
+    const { messageId } = req.params;
+    
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Invalid token.' });
@@ -99,10 +100,10 @@ const deleteMessage = async (req, res) => {
             return res.status(404).json({ error: 'Message not found.' });
         }
         // Check if the user is either the sender or the receiver of the message
-        if (message.senderId.toString() !== userId && message.receiverId.toString() !== userId) {
+        if (message.Sender !== userId && !message.Recipients.includes(userId)) {
             return res.status(403).json({ error: 'You do not have permission to delete this message.' });
         }
-        await Message.delete(messageId);
+        await Message.deleteOne({ _id: messageId });
         res.status(200).json({ message: 'Message deleted.' });
     }
     catch (err) {

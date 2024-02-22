@@ -6,7 +6,7 @@ const { allMessages, sendMessage, deleteMessage } = require('../controllers/mess
 
 router.get('/all', allMessages);
 router.post('/send', sendMessage);
-router.delete('/delete/:id', deleteMessage);
+router.delete('/delete/:messageId', deleteMessage);
 
 
 module.exports = router;
