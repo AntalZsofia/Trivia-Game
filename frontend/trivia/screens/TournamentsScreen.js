@@ -53,8 +53,8 @@ export default function TournamentsScreen({ route }) {
     navigation.navigate('Invite Friend', { tournament: tournament });
   }
 
-  const handleJoin = (tournament) => {
-    navigation.navigate('New Quiz', tournament) };
+  const handleJoin = (tournamentId) => {
+    navigation.navigate('New Quiz', { tournamentId: tournamentId }) };
     
   
   
@@ -88,7 +88,7 @@ export default function TournamentsScreen({ route }) {
               </Pressable>
             )
               : (
-                <Pressable style={styles.button} onPress={() => handleJoin(tournament)}>
+                <Pressable style={styles.button} onPress={() => handleJoin(tournament._id)}>
                   <Image source={Play} style={{ width: 40, height: 40 }} />
                   <Text style={styles.buttonText}>Join</Text>
                 </Pressable>
