@@ -16,7 +16,7 @@ const InviteFriendToTournament = ( { route }) => {
 
   const fetchFriends = async () => {
     try{
-    const response = await fetch(`http://localhost:3000/friends/all`, {
+    const response = await fetch(`http://localhost:3000/friends/nonparticipants/${tournament._id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

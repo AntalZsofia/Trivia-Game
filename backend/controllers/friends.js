@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 const User = require('../models/User');
-
+const Tournament = require('../models/Tournament');
 
 //all friends
 const allFriends = async (req, res) => {
@@ -28,6 +28,34 @@ const allFriends = async (req, res) => {
          console.error('Error:', err);
          res.status(500).json({ error: 'An error occurred while fetching friends.' });
 }
+};
+
+//get friends who didn't participate in the tournament
+const getNonParticipants = async (req, res) => {
+    const { tournamentId } = req.params;
+    const authHeader = req.headers.authorization;
+    if(!authHeader || !authHeader.startsWith('Bearer ')){
+        return res.status(401).json({ error: 'Invalid token.' });
+   }
+  const token = authHeader.split(' ')[1];
+
+  try{
+   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+   const userId = decodedToken.userId
+   ;
+   const user = await User.findById(userId);
+   if (!user) {
+       return res.status(404).json({ error: 'User not found.' });
+     }
+    const friends = await User.find({ _id: { $in: user.Friends } });
+    const tournament = await Tournament.findById(tournamentId);
+    const participants = tournament.users.map(user => user.user.toString());
+    const nonParticipants = friends.filter(friend => !participants.includes(friend._id.toString()));
+    res.status(200).json(nonParticipants);
+    }catch(err){
+        console.error('Error:', err);
+        res.status(500).json({ error: 'An error occurred while fetching non participants.' });
+    }
 };
 
 
@@ -200,4 +228,4 @@ const declineRequest = async (req, res) => {
 };
 
 
-module.exports = { allFriends, findUser, getReceivedRequests, getSentRequests, sendRequest, acceptRequest, declineRequest };
+module.exports = { allFriends, findUser, getReceivedRequests, getSentRequests, sendRequest, acceptRequest, declineRequest, getNonParticipants };
