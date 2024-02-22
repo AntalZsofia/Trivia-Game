@@ -23,8 +23,9 @@ const getFriendsTournaments = async (req, res) => {
         if(!user){
             return res.status(404).json({ error: 'User not found.' });
         }
-        const friendIds = user.Friends.map(f => f.toString());
-        const tournaments = await Tournament.find({ users: { $elemMatch: { user: { $in: friendIds } } } }).populate('users');
+        const friends = await User.find({ _id: { $in: user.Friends }} );
+        const friendUsernames = friends.map(f => f.username);
+        const tournaments = await Tournament.find({ creator: { $in: friendUsernames } }).populate('users');
     
         res.status(200).json(tournaments);
 
@@ -51,7 +52,7 @@ const getUserTournaments = async (req, res) => {
         if(!user){
             return res.status(404).json({ error: 'User not found.' });
         }
-        const tournaments = await Tournament.find({ users: { $elemMatch: { user: userId } } });
+        const tournaments = await Tournament.find({ creator: user.username });
 
         res.status(200).json(tournaments);
     }
