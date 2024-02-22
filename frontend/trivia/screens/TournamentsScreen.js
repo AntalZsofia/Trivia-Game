@@ -4,16 +4,17 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, Pressable, Image, ScrollView } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import Play from '../assets/icons/play.png';
+import Results from '../assets/icons/exam.png';
 
 
 export default function TournamentsScreen({ route }) {
   const navigation = useNavigation();
   const { token, userId, loggedInUser } = useContext(AuthContext);
   const [tournaments, setTournaments] = useState([]);
- // const [username, setUsername] = useState('');
+  // const [username, setUsername] = useState('');
   const [showMyTournaments, setShowMyTournaments] = useState(true);
 
- 
+
 
   const fetchTournaments = async () => {
     const url = showMyTournaments ? 'http://localhost:3000/tournament/user' : 'http://localhost:3000/tournament/friends';
@@ -39,7 +40,7 @@ export default function TournamentsScreen({ route }) {
   }
 
   useEffect(() => {
-   console.log(tournaments)
+    console.log(tournaments)
     fetchTournaments();
 
     const unsubscribe = navigation.addListener('focus', () => fetchTournaments());
@@ -54,52 +55,62 @@ export default function TournamentsScreen({ route }) {
   }
 
   const handleJoin = (tournamentId) => {
-    navigation.navigate('New Quiz', { tournamentId: tournamentId }) };
-    
-  
-  
+    navigation.navigate('New Quiz', { tournamentId: tournamentId })
+  };
 
-  return (
-    <ScrollView style={styles.container}>
+  const handleResults = (tournamentId) => {
+    navigation.navigate('All Results', { tournamentId: tournamentId });
+  }
 
-      <View style={styles.buttonContainer}>
-        <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 3 : 1 }]}
-          onPress={() => setShowMyTournaments(true)}
-        >
-          <Text style={styles.buttonText}>Own</Text>
-        </Pressable>
-        <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 1 : 3 }]}
-          onPress={() => setShowMyTournaments(false)}>
-          <Text style={styles.buttonText}>Friends</Text>
-        </Pressable>
-      </View>
+    return (
+      <ScrollView style={styles.container}>
 
-      {tournaments.map((tournament, index) => (
-        <View key={tournament._id} style={[styles.tournamentContainer, { backgroundColor: getBackgroundColor(index) }]}>
-          <Text style={styles.tournamentName}>{tournament.name} by {tournament.creator}</Text>
-          <Text style={styles.tournamentCategory}>Category: {tournament.category}</Text>
-          <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
-          <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between', }}>
-            {tournament.creator === loggedInUser ? (
-              <Pressable style={styles.button} onPress={() => handleInvite(tournament)}>
-                <Image source={Play} style={{ width: 40, height: 40 }} />
-                <Text style={styles.buttonText}>Invite</Text>
-              </Pressable>
-            )
-              : (
-                <Pressable style={styles.button} onPress={() => handleJoin(tournament._id)}>
-                  <Image source={Play} style={{ width: 40, height: 40 }} />
-                  <Text style={styles.buttonText}>Join</Text>
-                </Pressable>
-              )}
-          </View>
+        <View style={styles.buttonContainer}>
+          <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 3 : 1 }]}
+            onPress={() => setShowMyTournaments(true)}
+          >
+            <Text style={styles.buttonText}>Own</Text>
+          </Pressable>
+          <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 1 : 3 }]}
+            onPress={() => setShowMyTournaments(false)}>
+            <Text style={styles.buttonText}>Friends</Text>
+          </Pressable>
         </View>
-      ))}
-    </ScrollView>
 
-  )
-}
+        {tournaments.map((tournament, index) => (
+          <View key={tournament._id} style={[styles.tournamentContainer, { backgroundColor: getBackgroundColor(index) }]}>
+            <Text style={styles.tournamentName}>{tournament.name} by {tournament.creator}</Text>
+            <Text style={styles.tournamentCategory}>Category: {tournament.category}</Text>
+            <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
+            <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
+            <View style={{ flexDirection: 'column', justifyContent: 'space-between', }}>
+              {tournament.creator === loggedInUser ? (
+                <Pressable style={styles.button} onPress={() => handleInvite(tournament)}>
+                  <Image source={Play} style={{ width: 40, height: 40 }} />
+                  <Text style={styles.buttonText}>Invite</Text>
+                </Pressable>
+              )
+                : (
+                  tournament.users.map(user => user.username).includes(loggedInUser) ? (
+                    <Pressable style={styles.button} onPress={() => handleResults(tournament._id)}>
+                      <Image source={Results} style={{ width: 40, height: 40 }} />
+                      <Text style={styles.buttonText}>Results</Text>
+                    </Pressable>
+                  )
+                    : (
+                      <Pressable style={styles.button} onPress={() => handleJoin(tournament._id)}>
+                        <Image source={Play} style={{ width: 40, height: 40 }} />
+                        <Text style={styles.buttonText}>Join</Text>
+                      </Pressable>
+                    )
+                )}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    )
+  }
+
 
 const styles = StyleSheet.create({
   container: {
