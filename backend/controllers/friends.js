@@ -218,7 +218,11 @@ const declineRequest = async (req, res) => {
         }
 
         sender.SentFriendRequests = sender.SentFriendRequests.filter((request) => request.toString() !== receiverId.toString());
+        receiver.ReceivedFriendRequests = receiver.ReceivedFriendRequests.filter((request) => request.toString() !== senderId.toString());
+
+
         await sender.save();
+        await receiver.save();
 
         res.status(200).json({ message: 'Friend request declined.' });
     } catch(err) {

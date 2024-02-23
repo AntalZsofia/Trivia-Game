@@ -96,7 +96,7 @@ export default function PendingRequestsScreen({ navigation }) {
         });
         if(response.ok){
             console.log('Friend request declined successfully');
-            
+            setReceivedRequests(receivedRequests.filter(request => request._id !== id));
         }
         else{
             const data = await response.json();

@@ -63,9 +63,9 @@ export default function FriendsScreen({ navigation }) {
     fetchsearchUser();
   };
 
-  const sendFriendRequest = async (receiverId) => {
+  const sendFriendRequest = async (recipientName, receiverId) => {
 
-    console.log('receiver: ', receiverId);
+    console.log('receiver: ', recipientName);
     console.log('sender: ', userId);
 
     const response = await fetch('http://localhost:3000/friends/send_request', {
@@ -83,16 +83,17 @@ export default function FriendsScreen({ navigation }) {
     const data = await response.json();
     console.log('Friend request sent successfully', data);
 
-    const messageResponse = await fetch('http://localhost:3000/messages/send', {
+    const messageResponse = await fetch('http://localhost:3000/message/send', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        senderId: userId,
-        receiverId,
-        message: `You have a new friend request frpm ${loggedInUser}!`
+        recipients: recipientName,
+        sender: loggedInUser,
+        message: `You have a new friend request from ${loggedInUser}!`,
+        tournamentId: null,
       }),
     });
     if (!messageResponse.ok) {
@@ -132,7 +133,7 @@ return (
         <FlatList
           data={searchResults}
           renderItem={({ item }) => (
-            <Pressable onPress={() => sendFriendRequest(item._id)}>
+            <Pressable onPress={() => sendFriendRequest(item.username, item._id)}>
               <View style={styles.friendResult}>
                 <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
                 <Text style={styles.friendName}>{item.username}</Text>
