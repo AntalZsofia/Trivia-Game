@@ -35,7 +35,30 @@ useFocusEffect(
                 console.error(err);
             }
         }
+
+        const fetchMessages = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/message/all', { 
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setMessages(data);
+                } else {
+                    console.log('Fetching messages failed', data.error);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+
         fetchUserDetails();
+        fetchMessages();
     }, [token])
 );
 const handleMessages = () => {
@@ -75,7 +98,7 @@ const handleMessages = () => {
             </View>
             <View style={styles.messagesContainer}>
         <Pressable onPress={handleMessages}>
-          <Text style={styles.messagesText}>Notifications</Text>
+          <Text style={styles.messagesText}>Notifications ({messages.length})</Text>
         </Pressable>
       </View>
         </View>

@@ -65,6 +65,7 @@ export default function MessagesScreen({ navigation }) {
             
             navigation.navigate('Pending Requests');
         }
+        deleteMessage(item._id);
     }
 
     return (
@@ -78,9 +79,6 @@ export default function MessagesScreen({ navigation }) {
                             <Text style={styles.message}
                              onPress={() => handlePressMessage(item)}>
                                 {item.Message}</Text>
-                            <Pressable style={styles.deleteButton} onPress={() => deleteMessage(item._id)}>
-                                <Image source={Decline} style={{ width: 40, height: 40 }} />
-                            </Pressable>
                         </View>
                     </View>
                 )}
