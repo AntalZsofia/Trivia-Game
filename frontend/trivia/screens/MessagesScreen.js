@@ -56,7 +56,17 @@ export default function MessagesScreen({ navigation }) {
             console.error(err);
         }
     }
- 
+    const handlePressMessage = (item) => {
+        console.log(item);
+        if(item.Type === 'InviteTournament') {
+            navigation.navigate('New Quiz', { tournamentId: item.Data });
+        }
+        else if (item.Type === 'FriendRequest') {
+            
+            navigation.navigate('Pending Requests');
+        }
+    }
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -66,10 +76,7 @@ export default function MessagesScreen({ navigation }) {
                     <View style={styles.messageContainer}>
                         <View style={styles.innerContainer}>
                             <Text style={styles.message}
-                             onPress={() => {
-                                const tournamentId = item.TournamentId;
-                                navigation.navigate('New Quiz', { tournamentId: tournamentId }); 
-                              }}>
+                             onPress={() => handlePressMessage(item)}>
                                 {item.Message}</Text>
                             <Pressable style={styles.deleteButton} onPress={() => deleteMessage(item._id)}>
                                 <Image source={Decline} style={{ width: 40, height: 40 }} />

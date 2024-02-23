@@ -77,9 +77,11 @@ const InviteFriendToTournament = ( { route }) => {
     fetch('http://localhost:3000/message/send', {
       method: 'POST',
       body: JSON.stringify({
+        sender: loggedInUser,
         recipients: recipientUsernames,
         message: message,
-        tournamentId: tournamentId
+        type: 'InviteTournament',
+        data: tournamentId
       }),
       headers: {
         'Content-Type': 'application/json',

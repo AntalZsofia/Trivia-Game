@@ -93,7 +93,8 @@ export default function FriendsScreen({ navigation }) {
         recipients: recipientName,
         sender: loggedInUser,
         message: `You have a new friend request from ${loggedInUser}!`,
-        tournamentId: null,
+        type: 'FriendRequest',
+        data: null,
       }),
     });
     if (!messageResponse.ok) {
