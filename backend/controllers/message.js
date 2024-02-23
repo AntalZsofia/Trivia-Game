@@ -35,7 +35,7 @@ const allMessages = async (req, res) => {
 //send message
 const sendMessage = async (req, res) => {
     const authHeader = req.headers.authorization;
-    let { recipients, message, tournamentId } = req.body;
+    let { recipients, message, type, data } = req.body;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Invalid token.' });
@@ -65,7 +65,8 @@ const sendMessage = async (req, res) => {
                 Sender: userId,
                 Message: message,
                 Recipients: [recipientUser._id],
-                TournamentId: tournamentId
+                Type: type,
+                Data: data
             });
             await newMessage.save();
         }

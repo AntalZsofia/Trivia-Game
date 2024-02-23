@@ -11,8 +11,11 @@ const MessageSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    TournamentId: {
+    Type: {
         type: String
+    },
+    Data: {
+        type: mongoose.Schema.Types.Mixed
 
     }
 });
