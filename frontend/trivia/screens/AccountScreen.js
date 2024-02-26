@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, TextInput, StyleSheet, Image, Pressable } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import Plus from '../assets/icons/plus.png';
 
 const AccountScreen = ({ navigation, dispatch }) => {
     const [avatar, setAvatar] = useState(null);
@@ -70,7 +71,10 @@ const handleMessages = () => {
         <View style={styles.container}>
 
             <View style={styles.avatarContainer}>
+                <Pressable onPress={() => navigation.navigate('Avatar')}>
             <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+                </Pressable>
+                <Image source={Plus}style={styles.plusIcon} />
             </View>
 
             <View style={styles.userContainer}>
@@ -120,6 +124,16 @@ const styles = StyleSheet.create({
     },
     avatarContainer:{
         marginTop: 20,
+        position: 'relative',
+        marginLeft: 10,
+    },
+    plusIcon: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        width: 25,
+        height: 25,
+        borderRadius: 50,
     },
     userContainer: {
         width: '80%',
@@ -131,7 +145,7 @@ const styles = StyleSheet.create({
         borderColor: '#000000',
         borderWidth: 1,
         borderRadius: 10,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#E0F8FD',
     },
     detailContainer: {
         flexDirection: 'row',

@@ -27,6 +27,7 @@ import InviteFriendToTournament from './screens/InviteFriendToTournament';
 import QuizFromTournamentScreen from './screens/QuizFromTournamentScreen';
 import ResultAfterTournament from './screens/ResultAfterTournament';
 import AllResultsAfterTournament from './screens/AllResultsAfterTournament';
+import AvatarScreen from './screens/AvatarScreen';
 
 
 
@@ -187,6 +188,27 @@ function AccountStack() {
   return (
     <Stack.Navigator>
       <Tab.Screen name="Account" component={AccountScreen}
+        options={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 25,
+            color: 'black',
+            marginTop: 10,
+          },
+          headerStyle: {
+            height: 80,
+            backgroundColor: '#fff',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }
+        }} />
+        <Tab.Screen name="Avatar" component={AvatarScreen}
         options={{
           headerTitleAlign: 'center',
           headerTitleStyle: {
