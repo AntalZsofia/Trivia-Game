@@ -118,6 +118,11 @@ export default function TournamentsScreen({ route }) {
                   <Image source={Play} style={{ width: 40, height: 40 }} />
                   <Text style={styles.buttonText}>Invite</Text>
                 </Pressable>
+
+                <Pressable style={styles.button} onPress={() => handleResults(tournament._id)}>
+                      <Image source={Results} style={{ width: 40, height: 40 }} />
+                      <Text style={styles.buttonText}>Results</Text>
+                    </Pressable>
                 </View>
               )
                 : (
