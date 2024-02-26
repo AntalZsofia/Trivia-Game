@@ -89,6 +89,10 @@ return (
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#46A0F0',
+    flex: 1,
+  },
   item: {
     backgroundColor: 'white',
     borderColor: 'black',
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     marginTop: 40,
+    backgroundColor: '#46A0F0',
 
   },
   title: {
