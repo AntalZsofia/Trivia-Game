@@ -13,7 +13,7 @@ export default function AllResultsAfterTournament( { route } ) {
 
     useEffect(() => {
         fetchParticipantsDetails();
-    }, []);
+    }, [tournamentId]);
 
     const fetchParticipantsDetails = async () => {
         try {
