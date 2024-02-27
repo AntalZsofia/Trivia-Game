@@ -86,7 +86,7 @@ export default function AvatarScreen({ navigation, dispatch }) {
             <View style={styles.avatarContainer}>
                 {selectedAvatar ? (
                     <>
-                        <Avatar name={selectedAvatar} style={styles.avatarPreview} />
+                        <Image source={selectedAvatar} style={styles.avatarPreview} />
                     </>
                 ) : null}
             </View>

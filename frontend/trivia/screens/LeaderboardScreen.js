@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { Image } from 'react-native';
 import Trophy from '../assets/icons/trophy.png';
+import Avatar from './Avatar';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function LeaderboardScreen() {
   const [friends, setFriends] = useState([]);
   const [user, setUser] = useState({});
   const { token } = useContext(AuthContext);
 
-  useEffect(() => {
-    fetchUserDetails();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserDetails();
+    }, [token])
+  );
 
   const fetchUserDetails = async () => {
     try {
@@ -62,6 +66,7 @@ const fetchFriends = async (user) => {
 };
 const renderItem = ({ item, index }) => (
   <View style={styles.item}>
+    <Avatar name={item.avatar} style={styles.avatar}/>
     <Text style={styles.title}>{item.username}</Text>
 
     <View style={styles.scoreContainer}>
@@ -131,5 +136,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-  }
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+  },
 });

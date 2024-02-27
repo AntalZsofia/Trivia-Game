@@ -138,7 +138,7 @@ export default function FriendsScreen({ navigation }) {
             renderItem={({ item }) => (
               <Pressable onPress={() => sendFriendRequest(item.username, item._id)}>
                 <View style={styles.friendResult}>
-                  <Avatar name={item.avatar} />
+                  <Avatar name={item.avatar} style={styles.avatar} />
                   <Text style={styles.friendName}>{item.username}</Text>
                 </View>
               </Pressable>
@@ -160,7 +160,7 @@ export default function FriendsScreen({ navigation }) {
           data={friends}
           renderItem={({ item }) => (
             <View style={styles.friend}>
-              <Avatar name={item.avatar} />
+              <Avatar name={item.avatar} style={styles.avatar} />
               <Text style={styles.friendName}>{item.username}</Text>
             </View>
           )}
@@ -259,4 +259,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+  }
 });

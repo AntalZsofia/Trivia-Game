@@ -12,6 +12,6 @@ const avatarImages = {
     bunny: require('../assets/avatars/bunny.jpg'),
 };
 
-export default function Avatar({ name }) {
-    return <Image source={avatarImages[name]} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />;
+export default function Avatar({ name, style }) {
+    return <Image source={avatarImages[name]} style={style} />;
 }
