@@ -4,11 +4,21 @@ import { View, Text, TextInput, StyleSheet, Image, Pressable } from 'react-nativ
 import { useFocusEffect } from '@react-navigation/native';
 import Plus from '../assets/icons/plus.png';
 
+const avatarImages = {
+    'bunny': require('../assets/avatars/bunny.jpg'),
+    'fox': require('../assets/avatars/fox.jpg'),
+    'lion': require('../assets/avatars/lion.jpg'),
+    'coala': require('../assets/avatars/coala.jpg'),
+    'dog': require('../assets/avatars/dog.jpg'),
+    'tiger': require('../assets/avatars/tiger.jpg'),
+};
+
+
 const AccountScreen = ({ navigation, dispatch }) => {
     const [avatar, setAvatar] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
     const { token, userId } = useContext(AuthContext);
-    const avatars = ['bunny.jpg', 'fox.jpg', 'lion.jpg'];
+
     const [messages, setMessages] = useState([]);
 
 
@@ -29,6 +39,7 @@ useFocusEffect(
                     console.log('User details fetched successfully', data);
                     console.log(data)
                     setUserDetails(data);
+                    setAvatar(data.avatar);
                 } else {
                     console.log('Fetching user details failed', data.error);
                 }
@@ -72,7 +83,7 @@ const handleMessages = () => {
 
             <View style={styles.avatarContainer}>
                 <Pressable onPress={() => navigation.navigate('Avatar')}>
-            <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+            <Image source={avatar ? avatarImages[avatar] : avatarImages['bunny']} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
                 </Pressable>
                 <Image source={Plus}style={styles.plusIcon} />
             </View>

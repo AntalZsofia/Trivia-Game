@@ -6,19 +6,20 @@ import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-const avatars = [
-    require("../assets/avatars/bunny.jpg"),
-    require("../assets/avatars/fox.jpg"),
-    require("../assets/avatars/lion.jpg"),
-    require("../assets/avatars/coala.jpg"),
-    require("../assets/avatars/dog.jpg"),
-    require("../assets/avatars/tiger.jpg"),
-];
+
+const avatarImages = {
+    'bunny': require("../assets/avatars/bunny.jpg"),
+    'fox': require("../assets/avatars/fox.jpg"),
+    'lion': require("../assets/avatars/lion.jpg"),
+    'coala': require("../assets/avatars/coala.jpg"),
+    'dog': require("../assets/avatars/dog.jpg"),
+    'tiger': require("../assets/avatars/tiger.jpg"),
+};
 
 
 
 
-export default function AccountScreen({ navigation, dispatch }) {
+export default function AvatarScreen({ navigation, dispatch }) {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const [selectedBorder, setSelectedBorder] = useState(null);
     const { token, userId } = useContext(AuthContext);
@@ -39,7 +40,8 @@ export default function AccountScreen({ navigation, dispatch }) {
                 console.log('User details fetched successfully', data);
                 console.log(data)
                 setUserDetails(data);
-                setSelectedAvatar(data.avatar);
+                setSelectedAvatar(avatarImages[data.avatar]);
+                console.log(data.avatar);
             } else {
                 console.log('Fetching user details failed', data.error);
             }
@@ -48,22 +50,24 @@ export default function AccountScreen({ navigation, dispatch }) {
         }
     }
     const updateUserDetails = async () => {
+        const avatarName = Object.keys(avatarImages).find(name => avatarImages[name] === selectedAvatar);
         try {
-            const response = await fetch('http://localhost:3000/user/update', {
+            const response = await fetch('http://localhost:3000/user/avatar/update', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    avatar: selectedAvatar,
+                    avatar: avatarName,
                 }),
             });
             const data = await response.json();
             if (response.ok) {
                 console.log('User details updated successfully', data);
                 setUserDetails(data);
-                setSelectedAvatar(data.avatar);
+                setSelectedAvatar(avatarImages[data.avatar]);
+
                 navigation.navigate('Account');
             } else {
                 console.log('Updating user details failed', data.error);
@@ -72,25 +76,28 @@ export default function AccountScreen({ navigation, dispatch }) {
             console.error(err);
         }
     }
+    useEffect(() => {
+        fetchUserDetails();
+    }, []);
 
     return (
         <View style={styles.container}>
             <View style={styles.avatarContainer}>
                 {selectedAvatar ? (
                     <>
-                        <Image source={selectedAvatar} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+                        <Image source={{ uri: selectedAvatar }} style={styles.avatarPreview} />
                     </>
                 ) : null}
             </View>
             <Text style={styles.changeAvatarText}>Change Avatar</Text>
             <View style={styles.avatarsContainer}>
-                {avatars.map((avatar, index) => (
-                    <Pressable key={index} onPress={() => setSelectedAvatar(avatar)} style={[styles.avatar, { borderColor: selectedAvatar === avatar ? '#f3872f' : 'transparent', borderWidth: selectedAvatar === avatar ? 2 : 0 }]}>
-                        <Image source={avatar} style={styles.avatar} />
+                {Object.entries(avatarImages).map(([avatarName, avatarImage], index) => (
+                    <Pressable key={index} onPress={() => setSelectedAvatar(avatarImage)} style={[styles.avatar, { borderColor: selectedAvatar === avatarImage ? '#f3872f' : 'transparent', borderWidth: selectedAvatar === avatarImage ? 2 : 0 }]}>
+                        <Image source={avatarImage} style={styles.avatar} />
                     </Pressable>
                 ))}
             </View>
-           
+
             <View style={styles.customizationContainer}>
                 <Text style={styles.changeAvatarText}>Add animation</Text>
             </View>
@@ -98,7 +105,7 @@ export default function AccountScreen({ navigation, dispatch }) {
                 <Text style={styles.saveChangesText}> Save Changes </Text>
             </Pressable>
         </View>
-        
+
     )
 }
 const styles = StyleSheet.create({
@@ -106,10 +113,17 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
+        backgroundColor: '#F5F5F5',
     },
     avatarContainer: {
         marginTop: 50,
         alignItems: 'center',
+    },
+    avatarPreview: {
+        width: 80,
+        height: 80,
+        marginLeft: 10,
+        borderRadius: 50
     },
     avatarsContainer: {
         flexDirection: 'row',
@@ -128,7 +142,7 @@ const styles = StyleSheet.create({
     changeAvatarText: {
         color: 'black',
         fontSize: 25,
-        fontStyle: 'bold',
+        fontWeight: 'bold',
     },
     userDetailsContainer: {
         marginTop: 50,
@@ -149,7 +163,7 @@ const styles = StyleSheet.create({
     saveChangesText: {
         color: '#fff',
         fontSize: 20,
-        fontStyle: 'bold',
+        fontWeight: 'bold',
         alignSelf: 'center'
     },
 });
