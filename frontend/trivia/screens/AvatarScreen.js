@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import Avatar from "./Avatar";
 
 
 const avatarImages = {
@@ -85,22 +86,21 @@ export default function AvatarScreen({ navigation, dispatch }) {
             <View style={styles.avatarContainer}>
                 {selectedAvatar ? (
                     <>
-                        <Image source={{ uri: selectedAvatar }} style={styles.avatarPreview} />
+                        <Avatar name={selectedAvatar} style={styles.avatarPreview} />
                     </>
                 ) : null}
             </View>
             <Text style={styles.changeAvatarText}>Change Avatar</Text>
             <View style={styles.avatarsContainer}>
                 {Object.entries(avatarImages).map(([avatarName, avatarImage], index) => (
-                    <Pressable key={index} onPress={() => setSelectedAvatar(avatarImage)} style={[styles.avatar, { borderColor: selectedAvatar === avatarImage ? '#f3872f' : 'transparent', borderWidth: selectedAvatar === avatarImage ? 2 : 0 }]}>
+                    <Pressable key={index} onPress={() => 
+                    setSelectedAvatar(avatarImage)} style={[styles.avatar, { borderColor: selectedAvatar === avatarImage ? 'black' : 'transparent', borderWidth: selectedAvatar === avatarImage ? 2 : 0 }]}>
                         <Image source={avatarImage} style={styles.avatar} />
                     </Pressable>
                 ))}
             </View>
 
-            <View style={styles.customizationContainer}>
-                <Text style={styles.changeAvatarText}>Add animation</Text>
-            </View>
+            
             <Pressable onPress={updateUserDetails} style={styles.saveChangesButton}>
                 <Text style={styles.saveChangesText}> Save Changes </Text>
             </Pressable>

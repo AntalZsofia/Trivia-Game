@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext';
 import { View, Text, FlatList, Image, StyleSheet, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import Avatar from './Avatar';
+
 
 export default function FriendsScreen({ navigation }) {
   const { token, userId, loggedInUser } = useContext(AuthContext);
@@ -106,67 +108,67 @@ export default function FriendsScreen({ navigation }) {
   }
 
 
-return (
-  <View style={styles.container}>
-    <View style={styles.searchUserContainer}>
-      <TextInput
-        style={styles.searchUserInput}
-        placeholder="Search new friends"
-        onChangeText={(text) => {
-          setSearchInput(text);
-          if (text === '') {
-            setSearchResults([]);
-          }
-        }}
-        value={searchInput}
-      />
-      <Pressable
-        style={styles.searchUserButton}
-        onPress={handleSearchUser}>
-        <Text style={styles.searchUserButtonText}>Search</Text>
-      </Pressable>
-    </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchUserContainer}>
+        <TextInput
+          style={styles.searchUserInput}
+          placeholder="Search new friends"
+          onChangeText={(text) => {
+            setSearchInput(text);
+            if (text === '') {
+              setSearchResults([]);
+            }
+          }}
+          value={searchInput}
+        />
+        <Pressable
+          style={styles.searchUserButton}
+          onPress={handleSearchUser}>
+          <Text style={styles.searchUserButtonText}>Search</Text>
+        </Pressable>
+      </View>
 
 
-    {searchResults.length > 0 && (
+      {searchResults.length > 0 && (
+        <View style={styles.friendList}>
+          <Text style={styles.resultTitle}>Results</Text>
+          <FlatList
+            data={searchResults}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => sendFriendRequest(item.username, item._id)}>
+                <View style={styles.friendResult}>
+                  <Avatar name={item.avatar} />
+                  <Text style={styles.friendName}>{item.username}</Text>
+                </View>
+              </Pressable>
+            )}
+            keyExtractor={(item) => item._id}
+          />
+        </View>
+      )}
+
+      <View style={styles.friendRequestsContainer}>
+        <Pressable onPress={handlePendingRequests}>
+          <Text style={styles.friendRequestsButtonText}>Pending requests</Text>
+        </Pressable>
+      </View>
+
       <View style={styles.friendList}>
-        <Text style={styles.resultTitle}>Results</Text>
+        <Text style={{ fontSize: 20, marginLeft: 20, marginBottom: 10 }}>My friends</Text>
         <FlatList
-          data={searchResults}
+          data={friends}
           renderItem={({ item }) => (
-            <Pressable onPress={() => sendFriendRequest(item.username, item._id)}>
-              <View style={styles.friendResult}>
-                <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
-                <Text style={styles.friendName}>{item.username}</Text>
-              </View>
-            </Pressable>
+            <View style={styles.friend}>
+              <Avatar name={item.avatar} />
+              <Text style={styles.friendName}>{item.username}</Text>
+            </View>
           )}
           keyExtractor={(item) => item._id}
         />
       </View>
-    )}
-
-    <View style={styles.friendRequestsContainer}>
-      <Pressable onPress={handlePendingRequests}>
-        <Text style={styles.friendRequestsButtonText}>Pending requests</Text>
-      </Pressable>
     </View>
-
-    <View style={styles.friendList}>
-      <Text style={{ fontSize: 20, marginLeft: 20, marginBottom: 10 }}>My friends</Text>
-      <FlatList
-        data={friends}
-        renderItem={({ item }) => (
-          <View style={styles.friend}>
-            <Image source={require('../assets/avatars/bunny.jpg')} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
-            <Text style={styles.friendName}>{item.username}</Text>
-          </View>
-        )}
-        keyExtractor={(item) => item._id}
-      />
-    </View>
-  </View>
-);
+  );
 }
 
 const styles = StyleSheet.create({
