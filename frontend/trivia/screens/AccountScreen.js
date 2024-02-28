@@ -3,27 +3,19 @@ import { AuthContext } from '../context/AuthContext';
 import { View, Text, TextInput, StyleSheet, Image, Pressable } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Plus from '../assets/icons/plus.png';
-
-const avatarImages = {
-    'bunny': require('../assets/avatars/bunny.jpg'),
-    'fox': require('../assets/avatars/fox.jpg'),
-    'lion': require('../assets/avatars/lion.jpg'),
-    'coala': require('../assets/avatars/coala.jpg'),
-    'dog': require('../assets/avatars/dog.jpg'),
-    'tiger': require('../assets/avatars/tiger.jpg'),
-};
+import Avatar from './Avatar';
 
 
-const AccountScreen = ({ navigation, dispatch }) => {
+const AccountScreen = ({ navigation, route, dispatch }) => {
     const [avatar, setAvatar] = useState(null);
+    const [filter, setFilter] = useState('original');
     const [userDetails, setUserDetails] = useState(null);
     const { token, userId } = useContext(AuthContext);
 
     const [messages, setMessages] = useState([]);
 
 
-useFocusEffect(
-    useCallback(() => {
+
         const fetchUserDetails = async () => {
             console.log('token before fetch: ', token)
             try {
@@ -39,7 +31,11 @@ useFocusEffect(
                     console.log('User details fetched successfully', data);
                     console.log(data)
                     setUserDetails(data);
-                    setAvatar(data.avatar);
+
+                    const { avatar: navAvatar, filter: navFilter } = route.params || {};
+                    setAvatar(navAvatar || data.avatar);
+                    setFilter(navFilter || data.filter);
+
                 } else {
                     console.log('Fetching user details failed', data.error);
                 }
@@ -67,12 +63,19 @@ useFocusEffect(
                 console.error(err);
             }
         }
-
-
+    useFocusEffect(
+        useCallback(() => {
         fetchUserDetails();
         fetchMessages();
-    }, [token])
-);
+    }, [])
+    );
+    useEffect(() => {
+        if(route.params) {
+            setAvatar(route.params.avatar);
+            setFilter(route.params.filter);
+        }
+    }, [route.params]);
+
 const handleMessages = () => {
     navigation.navigate('Notifications');
 };
@@ -82,9 +85,12 @@ const handleMessages = () => {
         <View style={styles.container}>
 
             <View style={styles.avatarContainer}>
-                <Pressable onPress={() => navigation.navigate('Avatar')}>
-            <Image source={avatar ? avatarImages[avatar] : avatarImages['bunny']} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
-                </Pressable>
+            <Pressable onPress={() => navigation.navigate('Avatar')}>
+                {avatar ? 
+                    <Avatar name={avatar} filter={filter} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} /> :
+                    <Avatar name='bunny' filter='original' style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+                }
+            </Pressable>
                 <Image source={Plus}style={styles.plusIcon} />
             </View>
 
