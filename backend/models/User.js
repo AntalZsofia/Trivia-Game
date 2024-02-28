@@ -18,7 +18,11 @@ const UserSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: 'default-avatar-url'
+        default: 'bunny'
+    },
+    filter: {
+        type: String,
+        default: 'original'
     },
     date: {
         type: Date,
