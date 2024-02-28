@@ -8,7 +8,6 @@ import Avatar from './Avatar';
 
 const AccountScreen = ({ navigation, route, dispatch }) => {
     const [avatar, setAvatar] = useState(null);
-    const [filter, setFilter] = useState('original');
     const [userDetails, setUserDetails] = useState(null);
     const { token, userId } = useContext(AuthContext);
 
@@ -32,9 +31,7 @@ const AccountScreen = ({ navigation, route, dispatch }) => {
                     console.log(data)
                     setUserDetails(data);
 
-                    const { avatar: navAvatar, filter: navFilter } = route.params || {};
-                    setAvatar(navAvatar || data.avatar);
-                    setFilter(navFilter || data.filter);
+                    setAvatar(data.avatar);
 
                 } else {
                     console.log('Fetching user details failed', data.error);
@@ -69,12 +66,7 @@ const AccountScreen = ({ navigation, route, dispatch }) => {
         fetchMessages();
     }, [])
     );
-    useEffect(() => {
-        if(route.params) {
-            setAvatar(route.params.avatar);
-            setFilter(route.params.filter);
-        }
-    }, [route.params]);
+
 
 const handleMessages = () => {
     navigation.navigate('Notifications');
@@ -87,8 +79,8 @@ const handleMessages = () => {
             <View style={styles.avatarContainer}>
             <Pressable onPress={() => navigation.navigate('Avatar')}>
                 {avatar ? 
-                    <Avatar name={avatar} filter={filter} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} /> :
-                    <Avatar name='bunny' filter='original' style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
+                    <Avatar name={avatar} style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} /> :
+                    <Avatar name='bunny' style={{ width: 80, height: 80, marginLeft: 10, borderRadius: 50 }} />
                 }
             </Pressable>
                 <Image source={Plus}style={styles.plusIcon} />

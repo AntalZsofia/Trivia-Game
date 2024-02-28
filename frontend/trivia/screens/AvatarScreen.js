@@ -11,8 +11,6 @@ import Avatar, { avatarImages } from "./Avatar";
 
 export default function AvatarScreen({ navigation, dispatch }) {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
-    const [selectedFilter, setSelectedFilter] = useState('original');
-    const [previewFilter, setPreviewFilter] = useState('original');
     const { token, userId } = useContext(AuthContext);
     const [userDetails, setUserDetails] = useState(null);
 
@@ -32,7 +30,6 @@ export default function AvatarScreen({ navigation, dispatch }) {
                 console.log(data)
                 setUserDetails(data);
                 setSelectedAvatar(data.avatar);
-                setSelectedFilter(data.filter);
                 console.log(data.avatar);
             } else {
                 console.log('Fetching user details failed', data.error);
@@ -42,7 +39,7 @@ export default function AvatarScreen({ navigation, dispatch }) {
         }
     }
     const updateUserDetails = async () => {
-        const avatarName = Object.keys(avatarImages).find(name => avatarImages[name][selectedFilter] === selectedAvatar);
+        
         try {
             const response = await fetch('http://localhost:3000/user/avatar/update', {
                 method: 'PUT',
@@ -51,8 +48,8 @@ export default function AvatarScreen({ navigation, dispatch }) {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    avatar: avatarName,
-                    filter: selectedFilter,
+                    avatar: selectedAvatar,
+
                 }),
             });
             const data = await response.json();
@@ -60,9 +57,9 @@ export default function AvatarScreen({ navigation, dispatch }) {
                 console.log('User details updated successfully', data);
                 setUserDetails(data);
                 setSelectedAvatar(data.avatar);
-                setSelectedFilter(data.filter);
+                console.log(data.avatar);
 
-                navigation.navigate('Account', { avatar: avatarName, filter: selectedFilter });
+                navigation.navigate('Account');
             } else {
                 console.log('Updating user details failed', data.error);
             }
@@ -81,7 +78,7 @@ export default function AvatarScreen({ navigation, dispatch }) {
             <View style={styles.avatarContainer}>
                 {selectedAvatar ? (
                     <>
-                        <Avatar name={selectedAvatar} filter={previewFilter} style={styles.avatarPreview} />
+                        <Avatar name={selectedAvatar} style={styles.avatarPreview} />
 
                     </>
                 ) : null}
@@ -96,19 +93,11 @@ export default function AvatarScreen({ navigation, dispatch }) {
                         style={[styles.avatar,
                          { borderColor: selectedAvatar === avatarName ? 'black' : 'transparent',
                           borderWidth: selectedAvatar === avatarName ? 2 : 0 }]}>
-                        <Avatar name={avatarName} filter={selectedFilter} style={styles.avatar} />
+                        <Avatar name={avatarName} style={styles.avatar} />
                     </Pressable>
                 ))}
             </View>
-            <Text style={styles.changeFilterText}>Change Filter</Text>
-            <View style={styles.filtersContainer}>
-                <Pressable onPress={() => setPreviewFilter('original')} style={styles.filterButton}>
-                    <Text style={styles.filterText}>Original</Text>
-                </Pressable>
-                <Pressable onPress={() => setPreviewFilter('greyscale')} style={styles.filterButton}>
-                    <Text style={styles.filterText}>Greyscale</Text>
-                </Pressable>
-            </View>
+           
 
 
             <Pressable onPress={updateUserDetails} style={styles.saveChangesButton}>

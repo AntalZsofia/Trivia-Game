@@ -22,16 +22,15 @@ const update = async (req, res) => {
 }
 //update avatar image
 const updateAvatar = async (req, res) => {
-    const { avatar, filter } = req.body;
+    const { avatar } = req.body;
     try {
         const user = await User.findById(req.user._id);
         if (!user) {
             return res.status(404).json({ message: "User not found." })
         }
         user.avatar = avatar;
-        user.filter = filter;
         await user.save();
-        res.status(200).json({ message: "Avatar updated successfully." });
+        res.status(200).json({ message: "Avatar updated successfully.", avatar: user.avatar });
 
 
     }
