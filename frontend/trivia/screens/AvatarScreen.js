@@ -5,24 +5,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import Avatar from "./Avatar";
-
-
-const avatarImages = {
-    'bunny': require("../assets/avatars/bunny.jpg"),
-    'fox': require("../assets/avatars/fox.jpg"),
-    'lion': require("../assets/avatars/lion.jpg"),
-    'coala': require("../assets/avatars/coala.jpg"),
-    'dog': require("../assets/avatars/dog.jpg"),
-    'tiger': require("../assets/avatars/tiger.jpg"),
-};
-
+import Avatar, { avatarImages } from "./Avatar";
 
 
 
 export default function AvatarScreen({ navigation, dispatch }) {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
-    const [selectedBorder, setSelectedBorder] = useState(null);
+    const [selectedFilter, setSelectedFilter] = useState('original');
+    const [previewFilter, setPreviewFilter] = useState('original');
     const { token, userId } = useContext(AuthContext);
     const [userDetails, setUserDetails] = useState(null);
 
@@ -41,7 +31,8 @@ export default function AvatarScreen({ navigation, dispatch }) {
                 console.log('User details fetched successfully', data);
                 console.log(data)
                 setUserDetails(data);
-                setSelectedAvatar(avatarImages[data.avatar]);
+                setSelectedAvatar(data.avatar);
+                setSelectedFilter(data.filter);
                 console.log(data.avatar);
             } else {
                 console.log('Fetching user details failed', data.error);
@@ -51,7 +42,7 @@ export default function AvatarScreen({ navigation, dispatch }) {
         }
     }
     const updateUserDetails = async () => {
-        const avatarName = Object.keys(avatarImages).find(name => avatarImages[name] === selectedAvatar);
+        const avatarName = Object.keys(avatarImages).find(name => avatarImages[name][selectedFilter] === selectedAvatar);
         try {
             const response = await fetch('http://localhost:3000/user/avatar/update', {
                 method: 'PUT',
@@ -61,15 +52,17 @@ export default function AvatarScreen({ navigation, dispatch }) {
                 },
                 body: JSON.stringify({
                     avatar: avatarName,
+                    filter: selectedFilter,
                 }),
             });
             const data = await response.json();
             if (response.ok) {
                 console.log('User details updated successfully', data);
                 setUserDetails(data);
-                setSelectedAvatar(avatarImages[data.avatar]);
+                setSelectedAvatar(data.avatar);
+                setSelectedFilter(data.filter);
 
-                navigation.navigate('Account');
+                navigation.navigate('Account', { avatar: avatarName, filter: selectedFilter });
             } else {
                 console.log('Updating user details failed', data.error);
             }
@@ -77,6 +70,8 @@ export default function AvatarScreen({ navigation, dispatch }) {
             console.error(err);
         }
     }
+
+
     useEffect(() => {
         fetchUserDetails();
     }, []);
@@ -86,21 +81,36 @@ export default function AvatarScreen({ navigation, dispatch }) {
             <View style={styles.avatarContainer}>
                 {selectedAvatar ? (
                     <>
-                        <Image source={selectedAvatar} style={styles.avatarPreview} />
+                        <Avatar name={selectedAvatar} filter={previewFilter} style={styles.avatarPreview} />
+
                     </>
                 ) : null}
             </View>
             <Text style={styles.changeAvatarText}>Change Avatar</Text>
             <View style={styles.avatarsContainer}>
                 {Object.entries(avatarImages).map(([avatarName, avatarImage], index) => (
-                    <Pressable key={index} onPress={() => 
-                    setSelectedAvatar(avatarImage)} style={[styles.avatar, { borderColor: selectedAvatar === avatarImage ? 'black' : 'transparent', borderWidth: selectedAvatar === avatarImage ? 2 : 0 }]}>
-                        <Image source={avatarImage} style={styles.avatar} />
+                    <Pressable 
+                    key={index} 
+                    onPress={() =>
+                        setSelectedAvatar(avatarName)} 
+                        style={[styles.avatar,
+                         { borderColor: selectedAvatar === avatarName ? 'black' : 'transparent',
+                          borderWidth: selectedAvatar === avatarName ? 2 : 0 }]}>
+                        <Avatar name={avatarName} filter={selectedFilter} style={styles.avatar} />
                     </Pressable>
                 ))}
             </View>
+            <Text style={styles.changeFilterText}>Change Filter</Text>
+            <View style={styles.filtersContainer}>
+                <Pressable onPress={() => setPreviewFilter('original')} style={styles.filterButton}>
+                    <Text style={styles.filterText}>Original</Text>
+                </Pressable>
+                <Pressable onPress={() => setPreviewFilter('greyscale')} style={styles.filterButton}>
+                    <Text style={styles.filterText}>Greyscale</Text>
+                </Pressable>
+            </View>
 
-            
+
             <Pressable onPress={updateUserDetails} style={styles.saveChangesButton}>
                 <Text style={styles.saveChangesText}> Save Changes </Text>
             </Pressable>
@@ -116,7 +126,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5F5F5',
     },
     avatarContainer: {
-        marginTop: 50,
+        marginTop: 20,
         alignItems: 'center',
     },
     avatarPreview: {
@@ -132,8 +142,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     avatar: {
-        width: 150,
-        height: 150,
+        width: 120,
+        height: 120,
         borderRadius: 75,
     },
     changeAvatarButton: {
@@ -142,6 +152,27 @@ const styles = StyleSheet.create({
     changeAvatarText: {
         color: 'black',
         fontSize: 25,
+        fontWeight: 'bold',
+    },
+    changeFilterText: {
+        color: 'black',
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginTop: 20,
+    },
+    filtersContainer: {
+        flexDirection: 'row',
+        marginTop: 20,
+    },
+    filterButton: {
+        backgroundColor: '#09BC8A',
+        padding: 10,
+        borderRadius: 8,
+        margin: 10,
+    },
+    filterText: {
+        color: '#fff',
+        fontSize: 20,
         fontWeight: 'bold',
     },
     userDetailsContainer: {
