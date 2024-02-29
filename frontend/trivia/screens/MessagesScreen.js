@@ -69,6 +69,9 @@ export default function MessagesScreen({ navigation }) {
 
             navigation.navigate('All Results', { tournamentId: item.Data.tournamentId });
         }
+        else if(item.Type === 'FriendRequestAccepted') {
+            navigation.navigate('Friends');
+        }
         deleteMessage(item._id);
     }
 

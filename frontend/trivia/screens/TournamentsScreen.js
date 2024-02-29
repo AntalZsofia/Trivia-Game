@@ -67,7 +67,7 @@ export default function TournamentsScreen({ route }) {
         },
         body: JSON.stringify({
           recipients: tournamentCreator,
-          message: `${loggedInUser} just started one of your tournaments, go check the results.`,
+          message: `${loggedInUser} just joined one of your tournaments, go check the results!`,
           sender: loggedInUser,
           type: 'JoinTournament',
           data: { tournamentId: tournamentId }
