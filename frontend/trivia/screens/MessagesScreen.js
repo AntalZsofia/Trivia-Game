@@ -65,6 +65,10 @@ export default function MessagesScreen({ navigation }) {
             
             navigation.navigate('Pending Requests');
         }
+        else if(item.Type === 'JoinTournament'){
+
+            navigation.navigate('All Results', { tournamentId: item.Data.tournamentId });
+        }
         deleteMessage(item._id);
     }
 

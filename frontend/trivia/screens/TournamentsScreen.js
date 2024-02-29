@@ -55,8 +55,34 @@ export default function TournamentsScreen({ route }) {
     navigation.navigate('Invite Friend', { tournament: tournament });
   }
 
-  const handleJoin = (tournamentId) => {
+  const handleJoin = async (tournamentId, tournamentCreator) => {
     navigation.navigate('New Quiz', { tournamentId: tournamentId })
+
+    try {
+      const response = await fetch('http://localhost:3000/message/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          recipients: tournamentCreator,
+          message: `${loggedInUser} just started one of your tournaments, go check the results.`,
+          sender: loggedInUser,
+          type: 'JoinTournament',
+          data: { tournamentId: tournamentId }
+        })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Message sent successfully', data);
+      } else {
+        console.log('Sending message failed', data.error);
+      }
+    }
+    catch (err) {
+      console.error(err);
+    }
   };
 
   const handleResults = (tournamentId) => {
@@ -85,66 +111,66 @@ export default function TournamentsScreen({ route }) {
     }
   }
 
-    return (
-      <ScrollView style={styles.container}>
+  return (
+    <ScrollView style={styles.container}>
 
-        <View style={styles.buttonContainer}>
-          <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 3 : 1 }]}
-            onPress={() => setShowMyTournaments(true)}
-          >
-            <Text style={styles.buttonText}>Own</Text>
-          </Pressable>
-          <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 1 : 3 }]}
-            onPress={() => setShowMyTournaments(false)}>
-            <Text style={styles.buttonText}>Friends</Text>
-          </Pressable>
-        </View>
+      <View style={styles.buttonContainer}>
+        <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 3 : 1 }]}
+          onPress={() => setShowMyTournaments(true)}
+        >
+          <Text style={styles.buttonText}>Own</Text>
+        </Pressable>
+        <Pressable style={[styles.buttonTournament, { borderWidth: showMyTournaments ? 1 : 3 }]}
+          onPress={() => setShowMyTournaments(false)}>
+          <Text style={styles.buttonText}>Friends</Text>
+        </Pressable>
+      </View>
 
-        {tournaments.map((tournament, index) => (
-          <View key={tournament._id} style={[styles.tournamentContainer, { backgroundColor: getBackgroundColor(index) }]}>
-            <Text style={styles.tournamentName}>{tournament.name} by {tournament.creator}</Text>
-            <Text style={styles.tournamentCategory}>Category: {tournament.category}</Text>
-            <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
-            <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
-            <View style={{ flexDirection: 'column', justifyContent: 'space-between', }}>
-              {tournament.creator === loggedInUser ? (
-                <View style={styles.buttonContainer}>
+      {tournaments.map((tournament, index) => (
+        <View key={tournament._id} style={[styles.tournamentContainer, { backgroundColor: getBackgroundColor(index) }]}>
+          <Text style={styles.tournamentName}>{tournament.name} by {tournament.creator}</Text>
+          <Text style={styles.tournamentCategory}>Category: {tournament.category}</Text>
+          <Text style={styles.tournamentDifficulty}>Difficulty: {tournament.difficulty}</Text>
+          <Text style={styles.userCount}>Users: {tournament.users.length}</Text>
+          <View style={{ flexDirection: 'column', justifyContent: 'space-between', }}>
+            {tournament.creator === loggedInUser ? (
+              <View style={styles.buttonContainer}>
                 <Pressable style={styles.button} onPress={() => handleDelete(tournament._id)}>
-                <Image source={Delete} style={{ width: 40, height: 40 }} />
-                <Text style={styles.buttonText}>Delete</Text>
+                  <Image source={Delete} style={{ width: 40, height: 40 }} />
+                  <Text style={styles.buttonText}>Delete</Text>
 
-              </Pressable>
+                </Pressable>
                 <Pressable style={styles.button} onPress={() => handleInvite(tournament)}>
                   <Image source={Play} style={{ width: 40, height: 40 }} />
                   <Text style={styles.buttonText}>Invite</Text>
                 </Pressable>
 
                 <Pressable style={styles.button} onPress={() => handleResults(tournament._id)}>
-                      <Image source={Results} style={{ width: 40, height: 40 }} />
-                      <Text style={styles.buttonText}>Results</Text>
-                    </Pressable>
-                </View>
-              )
-                : (
-                  tournament.users.map(user => user.username).includes(loggedInUser) ? (
-                    <Pressable style={styles.button} onPress={() => handleResults(tournament._id)}>
-                      <Image source={Results} style={{ width: 40, height: 40 }} />
-                      <Text style={styles.buttonText}>Results</Text>
+                  <Image source={Results} style={{ width: 40, height: 40 }} />
+                  <Text style={styles.buttonText}>Results</Text>
+                </Pressable>
+              </View>
+            )
+              : (
+                tournament.users.map(user => user.username).includes(loggedInUser) ? (
+                  <Pressable style={styles.button} onPress={() => handleResults(tournament._id)}>
+                    <Image source={Results} style={{ width: 40, height: 40 }} />
+                    <Text style={styles.buttonText}>Results</Text>
+                  </Pressable>
+                )
+                  : (
+                    <Pressable style={styles.button} onPress={() => handleJoin(tournament._id, tournament.creator)}>
+                      <Image source={Play} style={{ width: 40, height: 40 }} />
+                      <Text style={styles.buttonText}>Join</Text>
                     </Pressable>
                   )
-                    : (
-                      <Pressable style={styles.button} onPress={() => handleJoin(tournament._id)}>
-                        <Image source={Play} style={{ width: 40, height: 40 }} />
-                        <Text style={styles.buttonText}>Join</Text>
-                      </Pressable>
-                    )
-                )}
-            </View>
+              )}
           </View>
-        ))}
-      </ScrollView>
-    )
-  }
+        </View>
+      ))}
+    </ScrollView>
+  )
+}
 
 
 const styles = StyleSheet.create({
