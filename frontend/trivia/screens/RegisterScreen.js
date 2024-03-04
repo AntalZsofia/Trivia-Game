@@ -38,7 +38,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
             const data = await response.json();
             if (response.ok) {
                 console.log('Register successful', data.token);
-                setIsLoggedIn(true);
+                setIsLoggedIn(false);
                 setToken(data.token);
                 setUserId(data.userId);
                 navigation.navigate('LoginScreen');
