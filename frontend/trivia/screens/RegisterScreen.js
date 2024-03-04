@@ -16,6 +16,17 @@ const RegisterScreen = ({ navigation, dispatch }) => {
             alert('Username, password and email fields are required.');
             return;
         }
+
+        if (username.length < 3) {
+            alert('Username must be at least 3 characters long.');
+            return;
+        }
+        const validCharacters = /^[a-zA-Z0-9]+$/i;
+        if (!validCharacters.test(username)) {
+            alert('Username can only contain letters and numbers.');
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:3000/auth/register', {
                 method: 'POST',
@@ -30,6 +41,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
                 setIsLoggedIn(true);
                 setToken(data.token);
                 setUserId(data.userId);
+                navigation.navigate('LoginScreen');
             } else {
                 console.log('Register failed', data.error);
             }
