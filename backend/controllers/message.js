@@ -1,6 +1,9 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const fetch = require('node-fetch');
+let fetch;
+import('node-fetch').then(nodeFetch => {
+  fetch = nodeFetch.default;
+});
 const User = require('../models/User');
 const Message = require('../models/Message');
 

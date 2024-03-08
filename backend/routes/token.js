@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch');
+let fetch;
+import('node-fetch').then(nodeFetch => {
+    fetch = nodeFetch.default;
+  });
 const Token = require('../models/Token');
 
 const { saveToken } = require('../controllers/token');

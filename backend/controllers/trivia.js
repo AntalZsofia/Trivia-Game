@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch');
+
+let fetch;
+import('node-fetch').then(nodeFetch => {
+  fetch = nodeFetch.default;
+});
 
 //random trivia
 const surprise = async (req, res) => {

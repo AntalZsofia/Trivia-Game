@@ -1,8 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const fetch = require('node-fetch');
 const User = require('../models/User');
 const Tournament = require('../models/Tournament');
+let fetch;
+import('node-fetch').then(nodeFetch => {
+  fetch = nodeFetch.default;
+});
 
 //all friends
 const allFriends = async (req, res) => {
